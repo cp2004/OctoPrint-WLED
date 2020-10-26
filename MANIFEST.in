@@ -1,0 +1,4 @@
+include README.md
+recursive-include octoprint_wled/templates *
+recursive-include octoprint_wled/translations *
+recursive-include octoprint_wled/static *
