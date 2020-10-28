@@ -1,4 +1,6 @@
-# WLED
+# OctoPrint WLED Integration
+
+# Under development! Not stable, not complete, do not use!
 
 **TODO:** Describe what your plugin does.
 
