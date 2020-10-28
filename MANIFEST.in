@@ -2,3 +2,5 @@ include README.md
 recursive-include octoprint_wled/templates *
 recursive-include octoprint_wled/translations *
 recursive-include octoprint_wled/static *
+include versioneer.py
+include octoprint_wled/_version.py

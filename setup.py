@@ -1,7 +1,5 @@
 # coding=utf-8
-
-########################################################################################################################
-### Do not forget to adjust the following variables to your own plugin.
+import versioneer
 
 # The plugin's identifier, has to be unique
 plugin_identifier = "wled"
@@ -11,10 +9,11 @@ plugin_package = "octoprint_wled"
 
 # The plugin's human readable name. Can be overwritten within OctoPrint's internal data via __plugin_name__ in the
 # plugin module
-plugin_name = "WLED"
+plugin_name = "OctoPrint-WLED"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-plugin_version = "0.1.0"
+plugin_version = versioneer.get_version()
+plugin_cmdclass = versioneer.get_cmdclass()
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
@@ -86,7 +85,8 @@ setup_parameters = octoprint_setuptools.create_plugin_setup_parameters(
 	requires=plugin_requires,
 	additional_packages=plugin_additional_packages,
 	ignored_packages=plugin_ignored_packages,
-	additional_data=plugin_additional_data
+	additional_data=plugin_additional_data,
+	cmdclass=plugin_cmdclass,
 )
 
 if len(additional_setup_parameters):
