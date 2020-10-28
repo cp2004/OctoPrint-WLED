@@ -9,18 +9,12 @@
 
 # These branches should only use tags, use for your release branches
 master
-prerelease
+pre-release
 rc/.*
 
 # neither should disconnected checkouts, e.g. 'git checkout <tag>'
 HEAD
 \(detached.*
 
-# here, maintenance is currently the branch for 0.5.2 - hash is of previous tag on this branch
-maintenance 0.5.2 2f7cec9d462e7073c8f65530b0951b8c4cf2dd50 pep440-dev
-
-# devel is currently the branch for work towards 0.6.0
-devel 0.6.0 2f7cec9d462e7073c8f65530b0951b8c4cf2dd50 pep440-dev
-
-# Every other branch is also development, so is resolved to 0.6.0 as well for now
-.* 0.6.0 2f7cec9d462e7073c8f65530b0951b8c4cf2dd50 pep440-dev
+# Every branch is development, so is resolved to for now
+.* 0.1.0 341d438606d341f401d0d102a4e81e8f14dd572c pep440-dev
