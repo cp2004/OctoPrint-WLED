@@ -40,14 +40,14 @@ class WledPlugin(
                 "current": self._plugin_version,
                 "stable_branch": {
                     "name": "Stable",
-                    "branch": "master",
-                    "comittish": ["master"],
+                    "branch": "main",
+                    "comittish": ["main"],
                 },
                 "prerelease_branches": [
                     {
                         "name": "Release Candidate",
                         "branch": "pre-release",
-                        "comittish": ["pre-release", "master"],
+                        "comittish": ["pre-release", "main"],
                     }
                 ],
                 # update method: pip
