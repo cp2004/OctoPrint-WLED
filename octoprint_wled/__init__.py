@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, division, unicode_literals
+
+import asyncio
 
 import octoprint.plugin
+
+from octoprint_wled.wled import WLED
 
 from ._version import get_versions
 
@@ -9,15 +13,24 @@ __version__ = get_versions()["version"]
 del get_versions
 
 
-class WledPlugin(
+class WLEDPlugin(
+    octoprint.plugin.StartupPlugin,
     octoprint.plugin.SettingsPlugin,
     octoprint.plugin.AssetPlugin,
     octoprint.plugin.TemplatePlugin,
 ):
+    wled = None
+
+    def on_after_startup(self):
+        self.wled = WLED("192.168.0.91", user_agent=f"OctoPrintWLED/{__plugin_version__}")
+        device = self.wled.update()
+        self._logger.info(f"Connection to WLED {device.info.version} successful")
 
     # SettingsPlugin mixin
     def get_settings_defaults(self):
-        return {}
+        return {
+            "address": None,
+        }
 
     # AssetPlugin mixin
     def get_assets(self):
@@ -58,12 +71,12 @@ class WledPlugin(
 
 __plugin_name__ = "WLED Integration"
 __plugin_version__ = __version__
-__plugin_pythoncompat__ = ">=2.7,<4"  # python 2 and 3
+__plugin_pythoncompat__ = ">=3.6,<4"  # python 3.6+
 
 
 def __plugin_load__():
     global __plugin_implementation__
-    __plugin_implementation__ = WledPlugin()
+    __plugin_implementation__ = WLEDPlugin()
 
     global __plugin_hooks__
     __plugin_hooks__ = {
