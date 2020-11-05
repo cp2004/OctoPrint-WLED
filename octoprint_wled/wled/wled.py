@@ -378,6 +378,10 @@ class WLED:
         if self._session and self._close_session:
             self._session.close()
 
+    @property
+    def device(self) -> Device:
+        return self._device
+
     def __enter__(self) -> WLED:
         return self
 

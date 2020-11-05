@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 
-import asyncio
+import threading
+from typing import Any, Dict, List, Mapping, Optional
 
 import octoprint.plugin
+from flask import jsonify
 
 from octoprint_wled.wled import WLED
+from octoprint_wled.wled.exceptions import (
+    WLEDConnectionError,
+    WLEDConnectionTimeoutError,
+    WLEDEmptyResponseError,
+    WLEDError,
+)
 
 from ._version import get_versions
 
@@ -18,22 +26,121 @@ class WLEDPlugin(
     octoprint.plugin.SettingsPlugin,
     octoprint.plugin.AssetPlugin,
     octoprint.plugin.TemplatePlugin,
+    octoprint.plugin.SimpleApiPlugin,
 ):
-    wled = None
+    def __init__(self):
+        super(WLEDPlugin, self).__init__()
+        self.config_needed: bool = False
+        self.config_valid: bool = True
+        self.wled: Optional[WLED] = None
+        self.error: bool = False  # This will let the user know on next refresh that
+        self.errors: List[str] = []
 
-    def on_after_startup(self):
-        self.wled = WLED("192.168.0.91", user_agent=f"OctoPrintWLED/{__plugin_version__}")
-        device = self.wled.update()
-        self._logger.info(f"Connection to WLED {device.info.version} successful")
+    def on_after_startup(self) -> None:
+        if not self._settings.get(["configured"]):
+            # Not configured yet, no point trying to connect
+            self.config_needed = True
 
-    # SettingsPlugin mixin
-    def get_settings_defaults(self):
+            return
+
+        if not self._settings.get(["connection", "host"]):
+            # Address is empty: don't connect, TODO throw warning?
+            self.config_valid = False
+            self._logger.info("No address, not connecting.")
+            return
+        t = threading.Thread(target=self.connect, name="WLED Startup connection")
+        t.daemon = True
+        t.start()
+
+    def connect(self) -> WLED:
+        if not self.wled:
+            self.wled = WLED(
+                host=self._settings.get(["connection", "host"]),
+                password=self._settings.get(["connection", "password"]),
+                port=self._settings.get_int(["connection", "port"]),
+                request_timeout=self._settings.get_int(
+                    ["connection", "request_timeout"], min=0
+                ),
+                tls=self._settings.get_boolean(["connection", "tls"]),
+                username=self._settings.get(["connection", "username"]),
+                verify_ssl=self._settings.get(["connection", "verify_ssl"]),
+                user_agent=f"OctoPrintWLED/{self._plugin_version}",
+            )
+        try:
+            device = self.wled.update()
+            self._logger.info(f"Connection to WLED {device.info.version} successful")
+        except (
+            WLEDEmptyResponseError,
+            WLEDConnectionError,
+            WLEDConnectionTimeoutError,
+        ) as exception:
+            self._logger.error(f"Error connecting to WLED, {exception}")
+            self.log_error(exception)
+
+        return self.wled
+
+    def restart_wled(self) -> None:
+        if self.test_configured():
+            self.wled = None
+            t = threading.Thread(target=self.connect, name="WLED Connect")
+            t.daemon = True
+            t.start()
+        else:
+            self.log_error("No hostname is configured, no connection can be made")
+
+    def test_configured(self) -> bool:
+        if self._settings.get(["connection", "host"]):
+            self._settings.set_boolean(["configured"], True)
+        else:
+            self._settings.set_boolean(["configured"], False)
+
+        return self._settings.get_boolean(["configured"])
+
+    def get_device_info(self) -> Any:
+        if self.wled:
+            return self.wled.device.info
+        else:
+            return None
+
+    def log_error(self, exception: [str, BaseException]):
+        self.error = True
+        self.errors.append(repr(exception))
+
+    # SimpleAPIPlugin
+    def on_api_get(self, request):
+        data = {"info": self.get_device_info()}
+        if self.error:
+            data.update(errors=self.errors)
+
+        return jsonify(data)
+
+    # SettingsPlugin
+    def get_settings_defaults(self) -> dict:
         return {
-            "address": None,
+            "configured": False,
+            "connection": {
+                "host": "",
+                "password": "",
+                "port": 80,
+                "request_timeout": 8,
+                "tls": False,
+                "username": None,
+                "verify_ssl": True,
+            },
         }
 
-    # AssetPlugin mixin
-    def get_assets(self):
+    def on_settings_save(self, data):
+        old_connection_settings = self._settings.get(["connection"])
+
+        octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
+
+        new_connection_settings = self._settings.get(["connection"])
+
+        if new_connection_settings != old_connection_settings:
+            self.restart_wled()
+
+    # AssetPlugin
+    def get_assets(self) -> dict:
         return {
             "js": ["js/wled.js"],
             "css": ["css/wled.css"],
@@ -41,7 +148,7 @@ class WLEDPlugin(
         }
 
     # Software Update hook
-    def get_update_information(self):
+    def get_update_information(self) -> dict:
         return {
             "wled": {
                 "displayName": "WLED Integration",

@@ -1,0 +1,48 @@
+<h5>WLED Settings</h5>
+<button class="btn btn-primary" data-bind="click: request_wled_data">
+    <i class="fas fa-redo-alt"></i>
+    Re-request WLED Data
+</button>
+<div class="row-fluid">
+<div class="span4 wled_card">
+    <h5><strong>WLED Connection Status:</strong> <span data-bind="text: connectionStatus">Disconnected</span></h5>
+    <p><strong>Architecture:</strong> <span data-bind="text: architecture">--</span></p>
+    <p><strong>Number of LEDs:</strong> <span data-bind="text: numLEDs">--</span></p>
+    <p><strong>Version:</strong> <span data-bind="text: version">--</span></p>
+    <p><strong>Wifi signal strength:</strong> <span data-bind="text: wifi_signal">--</span>%</p>
+</div>
+
+<div class="span8">
+    <h5>WLED connection Settings</h5>
+    <div class="form">
+        <label class="inline">
+            Hostname:
+            <input type="text" data-bind="value: connection_host">
+        </label>
+        <label class="inline">
+            WLED Username:
+            <input type="text" data-bind="value: connection_username" autocomplete="off">
+        </label>
+        <label class="inline">
+            WLED Password:
+            <input type="password" data-bind="value: connection_password" autocomplete="new-password">
+        </label>
+        <label class="inline">
+            Port:
+            <input type="number" min="0" step="1" data-bind="value: connection_port">
+        </label>
+        <label class="inline">
+            Request Timout:
+            <input type="number" min="0" step="0.1" data-bind="value: connection_request_timeout">
+        </label>
+        <label class="inline">
+            Use <code>https</code>:
+            <input type="checkbox" data-bind="checked: connection_tls">
+        </label>
+        <label class="inline">
+            Verify SSL:
+            <input type="checkbox" data-bind="checked: connection_verify_ssl">
+        </label>
+    </div>
+</div>
+</div>
