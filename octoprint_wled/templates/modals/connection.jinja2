@@ -1,0 +1,103 @@
+<div id="WLEDConnectionSettings" class="modal hide fade">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>WLED Connection Settings</h3>
+    </div>
+    <div class="modal-body">
+        <h5>WLED connection Settings</h5>
+        <div class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label">
+                    Hostname:
+                </label>
+                <div class="controls">
+                    <input type="text" placeholder="eg. 192.168.0.10 or wled.local" data-bind="value: settingsViewModel.settings.plugins.wled.connection.host">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Port:
+                </label>
+                <div class="controls">
+                    <input type="number" placeholder="80" min="0" step="1" data-bind="value: settingsViewModel.settings.plugins.wled.connection.port">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Request Timout:
+                </label>
+                <div class="controls">
+                    <input type="number" min="0" step="0.1" data-bind="value: settingsViewModel.settings.plugins.wled.connection.request_timeout">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Use HTTP basic auth
+                </label>
+                <div class="controls">
+                    <input type="checkbox" data-bind="checked: settingsViewModel.settings.plugins.wled.connection.auth">
+                    <p class="help-block">
+                        Check if you have a username/password setup in front of WLED, using HTTP Basic authentication
+                    </p>
+                </div>
+            </div>
+            <div class="control-group" data-bind="visible: settingsViewModel.settings.plugins.wled.connection.auth">
+                <label class="control-label">
+                    WLED Username:
+                </label>
+                <div class="controls">
+                    <input type="text" data-bind="value: settingsViewModel.settings.plugins.wled.connection.username" autocomplete="off">
+                    <p class="help-block">
+                        If you have a username/password setup in front of WLED, enter the username here.
+                    </p>
+                </div>
+            </div>
+            <div class="control-group" data-bind="visible: settingsViewModel.settings.plugins.wled.connection.auth">
+                <label class="control-label">
+                    WLED Password:
+                </label>
+                <div class="controls">
+                    <input type="password" data-bind="value: settingsViewModel.settings.plugins.wled.connection.password" autocomplete="new-password">
+                    <p class="help-block">
+                        If you have a username/password setup in front of WLED, enter the password here
+                    </p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Use <code>https</code>:
+                </label>
+                <div class="controls">
+                    <input type="checkbox" data-bind="checked: settingsViewModel.settings.plugins.wled.connection.tls">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">
+                    Verify SSL:
+                </label>
+                <div class="controls">
+                    <input type="checkbox" data-bind="checked: settingsViewModel.settings.plugins.wled.connection.verify_ssl">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button class="btn btn-primary" data-bind="click: testConnection, enable: !testInProgress()">
+                        <i data-bind="visible: testInProgress" class="fas fa-sync fa-spin"></i>
+                         Test Connection to WLED
+                    </button>
+                    <br>
+                    <span style="font-weight: bold;" data-bind="text: connectionStatus, css: {'text-success': connectionOK, 'text-error': !connectionOK()}"></span>
+                    <span data-bind="visible: !connectionOK()">
+                        <br>
+                        <span class="text-error" data-bind="text: connectionError"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <span class="pull-left">Be sure to save your changes after testing them!</span>
+        <button data-dismiss="modal" class="btn">Close</button>
+    </div>
+</div>

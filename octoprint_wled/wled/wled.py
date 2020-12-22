@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any, Dict, Mapping, Optional, Tuple, Union
 
 import backoff
@@ -58,7 +59,12 @@ class WLED:
         if self.base_path[-1] != "/":
             self.base_path += "/"
 
-    @backoff.on_exception(backoff.expo, WLEDConnectionError, max_tries=3, logger=None)
+    @backoff.on_exception(
+        backoff.expo,
+        WLEDConnectionError,
+        max_tries=3,
+        logger=logging.getLogger("octoprint.plugins.wled.wled"),
+    )
     def _request(
         self,
         uri: str = "",
@@ -138,7 +144,10 @@ class WLED:
         return response.text
 
     @backoff.on_exception(
-        backoff.expo, WLEDEmptyResponseError, max_tries=3, logger=None
+        backoff.expo,
+        WLEDEmptyResponseError,
+        max_tries=3,
+        logger=logging.getLogger("octoprint.plugins.wled.wled"),
     )
     def update(self, full_update: bool = False) -> Device:
         """Get all information about the device in a single call."""

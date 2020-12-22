@@ -16,5 +16,5 @@ rc/.*
 HEAD
 \(detached.*
 
-# Every branch is development, so is resolved to for now
+# Every branch is development, so is resolved to 0.1.0 for now
 .* 0.1.0 341d438606d341f401d0d102a4e81e8f14dd572c pep440-dev
