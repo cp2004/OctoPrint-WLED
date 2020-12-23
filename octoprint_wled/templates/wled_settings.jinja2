@@ -1,11 +1,31 @@
 <h5>WLED Settings</h5>
 <div class="row-fluid">
-    <div class="span9">
+    <div class="span7">
         <div class="connection-info">
-
+            <div data-bind="visible: requestInProgress">
+                <p>
+                    <span style="padding-right: 10px">
+                        <i class="fas fa-3x fa-sync fa-spin text-info pull-left"></i>
+                    </span>
+                    Loading...
+                </p>
+            </div>
+            <div data-bind="visible: statusConnected() && !requestInProgress()">
+                <p>
+                    <i class="fas fa-3x fa-check text-success pull-left" style="padding-right: 10px"></i>
+                    Connected to WLED <span data-bind="text: statusConnectionVersion"></span> at
+                    <span data-bind="text: statusConnectionHost"></span>:<span data-bind="text: statusConnectionPort"></span>
+                </p>
+            </div>
+            <div data-bind="visible: !statusConnected() && !requestInProgress()">
+                <p>
+                    <i class="fas fa-3x fa-times text-error pull-left" style="padding-right: 10px;"></i>
+                    <span data-bind="text: statusConnectionError"></span>
+                </p>
+            </div>
         </div>
     </div>
-    <div class="span3">
+    <div class="span5">
         <button class="btn btn-primary" data-toggle="modal" data-target="#WLEDConnectionSettings">
             <i class="fas fa-pencil-alt"></i>
             Edit connection settings

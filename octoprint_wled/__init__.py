@@ -5,10 +5,10 @@ import threading
 from typing import Any, Dict, List, Mapping, Optional, Union
 
 import octoprint.plugin
-from flask import jsonify
 
-from octoprint_wled import _version, api, comm
-from octoprint_wled.comm import WLEDComm
+from octoprint_wled import _version, api, wled
+from octoprint_wled.util import get_wled_params
+from octoprint_wled.wled import WLED
 
 __version__ = _version.get_versions()["version"]
 
@@ -20,22 +20,20 @@ class WLEDPlugin(
     octoprint.plugin.TemplatePlugin,
     octoprint.plugin.SimpleApiPlugin,
 ):
-    def __init__(self):
-        super(WLEDPlugin, self).__init__()
-        self.wled_comm: Optional[WLEDComm] = None
-        self.api: Optional[api.PluginAPI] = None
+    wled: Optional[WLED]
+    api: Optional[api.PluginAPI]
 
     def initialize(self) -> None:
         # Called after all injections complete, startup of plugin
-        # Watch initialisation order, for dependency tracking
         self.init_wled()
-        # API depends on wled_comm, initialised above
         self.api = api.PluginAPI(self)
 
     def init_wled(self) -> None:
         if self._settings.get(["connection", "host"]):
             # host is defined, we can try connecting
-            self.wled_comm = WLEDComm(self, self._settings)
+            self.wled = WLED(**get_wled_params(self._settings))
+        else:
+            self.wled = None
 
     # SimpleApiPlugin
     def get_api_commands(self) -> Dict[str, List[Optional[str]]]:
@@ -61,6 +59,10 @@ class WLEDPlugin(
                 "verify_ssl": True,
             },
         }
+
+    def on_settings_save(self, data):
+        octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
+        self.init_wled()
 
     # AssetPlugin
     def get_assets(self) -> Dict[str, List[str]]:

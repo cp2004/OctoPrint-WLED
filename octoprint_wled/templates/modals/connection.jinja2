@@ -27,7 +27,7 @@
                     Request Timout:
                 </label>
                 <div class="controls">
-                    <input type="number" min="0" step="0.1" data-bind="value: settingsViewModel.settings.plugins.wled.connection.request_timeout">
+                    <input type="number" placeholder="8" min="0" step="0.1" data-bind="value: settingsViewModel.settings.plugins.wled.connection.request_timeout">
                 </div>
             </div>
             <div class="control-group">
@@ -86,10 +86,10 @@
                          Test Connection to WLED
                     </button>
                     <br>
-                    <span style="font-weight: bold;" data-bind="text: connectionStatus, css: {'text-success': connectionOK, 'text-error': !connectionOK()}"></span>
-                    <span data-bind="visible: !connectionOK()">
+                    <span style="font-weight: bold;" data-bind="text: testConnectionStatus, css: {'text-success': testConnectionOK, 'text-error': !testConnectionOK()}"></span>
+                    <span data-bind="visible: !testConnectionOK()">
                         <br>
-                        <span class="text-error" data-bind="text: connectionError"></span>
+                        <span class="text-error" data-bind="text: testConnectionError"></span>
                     </span>
                 </div>
             </div>
