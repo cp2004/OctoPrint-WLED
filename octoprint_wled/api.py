@@ -96,7 +96,7 @@ class PluginAPI:
 
             response = {
                 "connected": True,
-                "effects": wled.device.effects,
+                "effects": util.effects_to_dict(wled.device.effects),
                 "connection_info": {
                     "version": wled.device.info.version,
                     "host": wled.host,

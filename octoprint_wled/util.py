@@ -2,9 +2,11 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import threading
-from typing import Any, Iterable, Mapping
+from typing import Any, Dict, Iterable, List, Mapping, Union
 
 import octoprint.plugin
+
+import octoprint_wled
 
 
 def get_wled_params(settings: octoprint.plugin.PluginSettings):
@@ -35,3 +37,13 @@ def start_thread(
     t.daemon = True
     t.start()
     return t
+
+
+def effects_to_dict(
+    effects: octoprint_wled.wled.Device.effects,
+) -> List[Dict[str, Union[str, int]]]:
+    parsed_effects = []
+    for effect in effects:
+        parsed_effects.append({"id": effect.effect_id, "name": effect.name})
+
+    return parsed_effects
