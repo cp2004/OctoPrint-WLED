@@ -41,7 +41,7 @@ class PluginAPI:
         if command == CMD_TEST:
             if self.post_test_thread and self.post_test_thread.is_alive():
                 return flask.jsonify({"status": "in_progress"})
-            util.start_thread(
+            self.post_test_thread = util.start_thread(
                 self.test_wled, kwargs={"data": data}, name="WLED Test thread"
             )
             return flask.jsonify({"status": "started"})
