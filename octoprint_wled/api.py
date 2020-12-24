@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import threading
+from typing import Dict, List, Optional
 
 import flask
 
+import octoprint_wled
+from octoprint_wled import util
 from octoprint_wled.wled import WLED
 from octoprint_wled.wled.exceptions import (
     WLEDConnectionError,
@@ -17,19 +21,43 @@ CMD_TEST = "test"
 
 class PluginAPI:
     def __init__(self, plugin):
-        self.plugin = plugin
+        self.plugin = plugin  # type: octoprint_wled.WLEDPlugin
         self._settings = plugin._settings
-        self._logger = logging.getLogger("octoprint.plugins.wled.api")
+        self._logger: logging.Logger = logging.getLogger("octoprint.plugins.wled.api")
+
+        # This API is asynchronous
+        # All methods return after creating a thread, then send a message
+        # on the websocket later. This prevents long running WLED API calls from
+        # blocking the API/frontend.
+        # If this thread exists, then the response is 'in progress'
+        self.get_thread: Optional[threading.Thread] = None
+        self.post_test_thread: Optional[threading.Thread] = None
 
     @staticmethod
-    def get_api_commands():
+    def get_api_commands() -> Dict[str, List[str]]:
         return {CMD_TEST: ["config"]}
 
     def on_api_command(self, command, data):
         if command == CMD_TEST:
-            return self.test_wled(data)
+            if self.post_test_thread and self.post_test_thread.is_alive():
+                return flask.jsonify({"status": "in_progress"})
+            util.start_thread(
+                self.test_wled, kwargs={"data": data}, name="WLED Test thread"
+            )
+            return flask.jsonify({"status": "started"})
 
     def on_api_get(self, request):
+        if self.get_thread and self.get_thread.is_alive():
+            return flask.jsonify({"status": "in_progress"})
+
+        self.get_thread = util.start_thread(
+            self.get_wled_status,
+            kwargs={"request": request},
+            name="WLED GET request thread",
+        )
+        return flask.jsonify({"status": "started"})
+
+    def get_wled_status(self, request) -> None:
         wled = self.plugin.wled
         if wled:
             if not wled.device:
@@ -43,24 +71,28 @@ class PluginAPI:
                     error = f"Error connecting to WLED at {wled.host}"
                     self._logger.error(error)
                     self._logger.error(repr(exception))
-                    return flask.jsonify(
+                    self.plugin.send_message(
+                        "api_get",
                         {
                             "connected": False,
                             "error": error,
                             "exception": repr(exception),
-                        }
+                        },
                     )
+                    return
                 except Exception as e:
                     error = f"Unknown error connecting to WLED at {wled.host}, consult the log for details."
                     self._logger.error(error)
                     self._logger.error(repr(e))
-                    return flask.jsonify(
+                    self.plugin.send_message(
+                        "api_get",
                         {
                             "connected": False,
                             "error": error,
                             "exception": repr(e),
-                        }
+                        },
                     )
+                    return
 
             response = {
                 "connected": True,
@@ -79,9 +111,9 @@ class PluginAPI:
                 "exception": "",
             }
 
-        return flask.jsonify(response)
+        self.plugin.send_message("api_get", response)
 
-    def test_wled(self, data):
+    def test_wled(self, data) -> None:
         """
         Tests if the WLED device is reachable from OctoPrint
         by making a single request to the JSON API
@@ -124,4 +156,4 @@ class PluginAPI:
                     "exception": repr(exception),
                 }
 
-        return flask.jsonify(response)
+        self.plugin.send_message("api_post_test", response)

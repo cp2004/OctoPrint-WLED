@@ -33,18 +33,21 @@ $(function() {
             self.testConnectionOK(true)
             self.testConnectionStatus("")
             self.testConnectionError("")
-            OctoPrint.simpleApiCommand("wled", "test", {config: config}).done(function(response){
-                self.testInProgress(false)
-                if (response.success){
-                    self.testConnectionOK(true)
-                    self.testConnectionStatus(response.message)
-                    self.testConnectionError("")
-                } else {
-                    self.testConnectionOK(false)
-                    self.testConnectionStatus(response.error)
-                    self.testConnectionError(response.exception)
-                }
-            })
+            OctoPrint.simpleApiCommand("wled", "test", {config: config})
+        }
+
+        self.fromTestResponse = function (response) {
+
+            self.testInProgress(false)
+            if (response.success){
+                self.testConnectionOK(true)
+                self.testConnectionStatus(response.message)
+                self.testConnectionError("")
+            } else {
+                self.testConnectionOK(false)
+                self.testConnectionStatus(response.error)
+                self.testConnectionError(response.exception)
+            }
         }
 
         // API GET response handler
@@ -55,7 +58,7 @@ $(function() {
         self.statusConnectionPort = ko.observable()
         self.statusConnectionVersion = ko.observable()
 
-        self.fromResponse = function (response){
+        self.fromGetResponse = function (response){
             if (response.connected){
                 self.statusConnected(true)
                 self.statusConnectionHost(response.connection_info.host)
@@ -73,7 +76,19 @@ $(function() {
         // Viewmodel callbacks
         self.onAfterBinding = self.onEventSettingsUpdated = function (){
             self.requestInProgress(true)
-            OctoPrint.simpleApiGet("wled").done(self.fromResponse)
+            OctoPrint.simpleApiGet("wled")
+        }
+
+        self.onDataUpdaterPluginMessage = function (plugin, data){
+            if (plugin !== "wled"){
+                return
+            }
+
+            if (data.type === "api_get"){
+                self.fromGetResponse(data.content)
+            } else if (data.type === "api_post_test"){
+                self.fromTestResponse(data.content)
+            }
         }
     }
     OCTOPRINT_VIEWMODELS.push({

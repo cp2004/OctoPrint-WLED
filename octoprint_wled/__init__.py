@@ -45,6 +45,12 @@ class WLEDPlugin(
     def on_api_get(self, request):
         return self.api.on_api_get(request)
 
+    # UI Notifier
+    def send_message(self, msg_type: str, msg_content: dict):
+        self._plugin_manager.send_plugin_message(
+            "wled", {"type": msg_type, "content": msg_content}
+        )
+
     # SettingsPlugin
     def get_settings_defaults(self) -> Dict[str, Any]:
         return {
