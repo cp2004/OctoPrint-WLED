@@ -2,11 +2,11 @@
 from __future__ import absolute_import, division, unicode_literals
 
 import threading
-from typing import Any, Dict, Iterable, List, Mapping, Union
+from typing import Any, Dict, Iterable, List, Mapping, Tuple, Union
 
 import octoprint.plugin
 
-import octoprint_wled
+import octoprint_wled.wled
 
 
 def get_wled_params(settings: octoprint.plugin.PluginSettings):
@@ -47,3 +47,10 @@ def effects_to_dict(
         parsed_effects.append({"id": effect.effect_id, "name": effect.name})
 
     return parsed_effects
+
+
+def hex_to_rgb(hex_colour: str) -> Tuple[int, int, int]:
+    if hex_colour is None:
+        return 0, 0, 0
+    h = hex_colour[1:7]
+    return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)

@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, unicode_literals
 
-import threading
-from typing import Any, Dict, List, Mapping, Optional, Union
+from typing import Any, Dict, List, Optional
 
 import octoprint.plugin
 
-from octoprint_wled import _version, api, wled
+from octoprint_wled import _version, api, events
 from octoprint_wled.util import get_wled_params
 from octoprint_wled.wled import WLED
 
@@ -19,14 +18,18 @@ class WLEDPlugin(
     octoprint.plugin.AssetPlugin,
     octoprint.plugin.TemplatePlugin,
     octoprint.plugin.SimpleApiPlugin,
+    octoprint.plugin.EventHandlerPlugin,
 ):
     wled: Optional[WLED]
     api: Optional[api.PluginAPI]
+    events: Optional[events.PluginEventHandler]
+    lights_on: bool = True
 
     def initialize(self) -> None:
         # Called after all injections complete, startup of plugin
         self.init_wled()
         self.api = api.PluginAPI(self)
+        self.events = events.PluginEventHandler(self)
 
     def init_wled(self) -> None:
         if self._settings.get(["connection", "host"]):
@@ -51,6 +54,10 @@ class WLEDPlugin(
             "wled", {"type": msg_type, "content": msg_content}
         )
 
+    # Event handling
+    def on_event(self, event, payload):
+        self.events.on_event(event, payload)
+
     # SettingsPlugin
     def get_settings_defaults(self) -> Dict[str, Any]:
         return {
@@ -63,6 +70,47 @@ class WLEDPlugin(
                 "request_timeout": 8,
                 "tls": False,
                 "verify_ssl": True,
+            },
+            "effects": {
+                "idle": {
+                    "enabled": True,
+                    "settings": [
+                        {
+                            "id": 0,
+                            "brightness": 255,
+                            "color_primary": "#ffffff",
+                            "effect": "Solid",
+                            "intensity": 100,
+                            "speed": 100,
+                            "override_on": True,
+                        },
+                        {
+                            "id": 1,
+                            "brightness": 255,
+                            "color_primary": "#ff0000",
+                            "effect": "Solid",
+                            "intensity": 100,
+                            "speed": 100,
+                            "override_on": True,
+                        },
+                    ],
+                },
+                "disconnected": {"enabled": False, "settings": []},
+                "failed": {"enabled": False, "settings": []},
+                "success": {"enabled": False, "settings": []},
+                "paused": {"enabled": False, "settings": []},
+                # example settings entry, per segment
+                # {
+                #   "id": 0,                  # Segment ID
+                #   "brightness": 100,        # Segment brightness
+                #   "color_primary": #ffffff, # Effect colour
+                #   "effect": "effect_name",  # Effect name
+                #   "intensity": 100,         # Effect intensity
+                #   "speed": 100              # Effect speed
+                #   "override_on": True       # Always turn the LEDs on
+                # }
+                # These should be created by the UI in this way, using the effect editor.
+                # It is *not* recommended that you configure these manually, it will probably go wrong.
             },
         }
 

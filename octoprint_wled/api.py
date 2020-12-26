@@ -22,6 +22,7 @@ CMD_TEST = "test"
 class PluginAPI:
     def __init__(self, plugin):
         self.plugin = plugin  # type: octoprint_wled.WLEDPlugin
+        # noinspection PyProtectedMember
         self._settings = plugin._settings
         self._logger: logging.Logger = logging.getLogger("octoprint.plugins.wled.api")
 
