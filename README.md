@@ -2,7 +2,7 @@
 
 # Under development! Not stable, not complete, do not use!
 
-# Development has been briefly paused (I don't have infinite time), but I am hoping for a release in the first part of 2021
+# Development has been ~~briefly paused (I don't have infinite time)~~ breifely resumed (I still don't have infitite time), but I am hoping for a release in the first part of 2021
 
 # Thank you for your patience with this one!
 
