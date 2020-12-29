@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "AAAA,UAAW;EACT,gBAAgB,EAAE,IAAI;EACtB,eAAe,EAAE,UAAU;EAC3B,MAAM,EAAE,8BAA0B;EAClC,aAAa,EAAE,MAAM;EACrB,OAAO,EAAE,IAAI;EACb,UAAU,EAAE,qCACd",
-"sources": ["../sass/wled.scss"],
+"mappings": "AACE,gCAAW;EACT,WAAW,EAAE,IAAI;;AAInB,wCAAiB;EACf,UAAU,EAAE,eAAe",
+"sources": ["../scss/wled.scss"],
 "names": [],
 "file": "wled.css"
 }
