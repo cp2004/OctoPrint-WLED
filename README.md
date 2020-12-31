@@ -1,23 +1,47 @@
 # OctoPrint WLED Integration
 
-# Under development! Not stable, not complete, do not use!
+### This plugin is still under development, not recommended you install it yet!
 
-# Development has been ~~briefly paused (I don't have infinite time)~~ breifely resumed (I still don't have infitite time), but I am hoping for a release in the first part of 2021
+[WLED](https://github.com/Aircoookie/WLED) is an awesome project, [OctoPrint](https://octoprint.org)
+is yet another awesome project. What could be better than an OctoPrint plugin for connecting the two?
 
-# Thank you for your patience with this one!
+This plugin allows you to configure a WLED device to connect to OctoPrint, and the LEDs can react to different events
+to display the status of your prints with ease!
 
-**TODO:** Describe what your plugin does.
+Inspired by my other plugin, [OctoPrint WS281x LED Status](https://github.com/cp2004/OctoPrint-WS281x_LED_Status), it
+aims to provide a similar experience of high configurability with ease of use.
+
+#### Current features:
+
+- Reacting to printer states including:
+  - Idle
+  - Disconnected
+  - Print success
+  - Print failed
+  - Print paused
+- Highly configurable settings
+- Easy to use UI
+- ... and more!
+
+**This project is under early development, please be patient as bugs are fixed and features are added!**
 
 ## Setup
 
 Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
 or manually using this URL:
 
-    https://github.com/cp2004/OctoPrint-WLED/archive/master.zip
-
-**TODO:** Describe how to install your plugin, if more needs to be done than just installing it via pip or through
-the plugin manager.
+    https://github.com/cp2004/OctoPrint-WLED/archive/main.zip
 
 ## Configuration
 
-**TODO:** Describe your plugin's configuration options (if any).
+Configuration can be performed in the OctoPrint UI, under Settings > WLED Integration.
+
+Pictures coming soon 😉!
+
+## Credits
+
+This plugin wouldn't be possible without the great work of [@frenck](https://github.com/frenck)'s
+[python-wled](https://github.com/frenck/python-wled) Python module that I was able to use. It has been slightly modified
+to work better within an OctoPrint plugin, but it is a great module to work with. Thank you!
+
+[View the python-wled license](https://github.com/cp2004/OctoPrint-WLED/blob/main/octoprint_wled/wled/LICENSE.md)
