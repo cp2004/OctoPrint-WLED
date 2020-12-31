@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import copy
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from octoprint.events import Events
 
@@ -32,8 +32,11 @@ class PluginEventHandler:
             Events.PRINT_PAUSED: "paused",
         }
 
+        self.last_event: Optional[str] = None
+
     def on_event(self, event, payload) -> None:
         if event in self.event_to_effect.keys():
+            self.last_event = event
             start_thread(
                 self.update_effect, kwargs={"effect": self.event_to_effect[event]}
             )
@@ -114,3 +117,10 @@ class PluginEventHandler:
             if response:
                 # Update the UI if necessary
                 self.plugin.send_message("event_update_effect", response)
+
+    def restart(self) -> None:
+        """
+        Process the last event again, called when settings are changed
+        :return: None
+        """
+        self.on_event(self.last_event, {})

@@ -103,6 +103,7 @@ class WLEDPlugin(
     def on_settings_save(self, data):
         octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
         self.init_wled()
+        self.events.restart()
 
     # AssetPlugin
     def get_assets(self) -> Dict[str, List[str]]:
