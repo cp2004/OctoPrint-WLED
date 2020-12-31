@@ -25,7 +25,7 @@ $(function () {
             return effect;
         };
 
-        self.setDefaultEffectObservables = function (object) {
+        self.setDefaultEffectObservables = function (object, uid) {
             object().id(0);
             object().brightness(200);
             object().color_primary("#ffffff");
@@ -156,9 +156,9 @@ $(function () {
 
         self.addEffect = function (name) {
             let uid = self.new_uid(name);
-            self.effects[name].segments.push(self.createEffectObservables(uid));
-            self.setDefaultEffectObservables(self.effects[name].editing);
-            self.showEditModal(name);
+            let new_effect = self.createEffectObservables(uid);
+            self.effects[name].segments.push(new_effect);
+            self.editEffect(name, new_effect);
         };
 
         self.new_uid = function (name) {
