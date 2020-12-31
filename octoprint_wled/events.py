@@ -79,14 +79,14 @@ class PluginEventHandler:
                     f"setting {segment['effect']} to segment {segment['id']}"
                 )
                 self.plugin.wled.segment(
-                    segment_id=segment["id"],
-                    brightness=segment["brightness"],
+                    segment_id=int(segment["id"]),
+                    brightness=int(segment["brightness"]),
                     color_primary=hex_to_rgb(segment["color_primary"]),
                     color_secondary=hex_to_rgb(segment["color_secondary"]),
                     color_tertiary=hex_to_rgb(segment["color_tertiary"]),
                     effect=segment["effect"],
-                    intensity=segment["intensity"],
-                    speed=segment["speed"],
+                    intensity=int(segment["intensity"]),
+                    speed=int(segment["speed"]),
                     on=lights_on,
                 )
                 response = {}
