@@ -18,7 +18,7 @@
 <div class="control-group">
     <label class="control-label">Effect</label>
     <div class="controls">
-        <select data-bind="value: effects.{{ identifier }}.editing().effect(),
+        <select data-bind="value: effects.{{ identifier }}.editing().effect,
                            options: availableEffects(),
                            optionsCaption: 'Choose an effect...',
                            enable: statusConnected">
@@ -38,7 +38,9 @@
     <div class="modal-body form-horizontal">
         {{ settingsInput("Segment ID", "number", identifier, "id", "Zero index of the segment, matching the one defined in the WLED settings") }}
         {{ settingsInput("Brightness", "number", identifier, "brightness") }}
-        {{ settingsInput("Color", "color", identifier, "color_primary") }}
+        {{ settingsInput("Primary Color", "color", identifier, "color_primary") }}
+        {{ settingsInput("Secondary Color", "color", identifier, "color_secondary") }}
+        {{ settingsInput("Tertiary Color", "color", identifier, "color_tertiary") }}
         {{ effectSelect(identifier) }}
         {{ settingsInput("Intensity", "number", identifier, "intensity") }}
         {{ settingsInput("Speed", "number", identifier, "speed") }}

@@ -79,6 +79,8 @@ class PluginEventHandler:
                     segment_id=segment["id"],
                     brightness=segment["brightness"],
                     color_primary=hex_to_rgb(segment["color_primary"]),
+                    color_secondary=hex_to_rgb(segment["color_secondary"]),
+                    color_tertiary=hex_to_rgb(segment["color_tertiary"]),
                     effect=segment["effect"],
                     intensity=segment["intensity"],
                     speed=segment["speed"],

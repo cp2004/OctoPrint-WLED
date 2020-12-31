@@ -79,19 +79,26 @@ class WLEDPlugin(
                 "paused": {"enabled": False, "settings": []},
                 # example settings entry, per segment
                 # {
-                #   "unique_id": 0            # UNIQUE internal ID of this segment. So it can be edited easily
-                #   "id": 0,                  # Segment ID
-                #   "brightness": 100,        # Segment brightness
-                #   "color_primary": #ffffff, # Effect colour
-                #   "effect": "Solid",        # Effect name
-                #   "intensity": 100,         # Effect intensity
-                #   "speed": 100              # Effect speed
-                #   "override_on": True       # Always turn the LEDs on
+                #   "unique_id": 0              # UNIQUE internal ID of this segment. So it can be edited easily
+                #   "id": 0,                    # Segment ID
+                #   "brightness": 100,          # Segment brightness
+                #   "color_primary": #ff0000,   # Effect colour 1
+                #   "color_secondary": #00ff00  # Effect colour 2
+                #   "color_tertiary": #0000ff,  # Effect colour 3
+                #   "effect": "Solid",          # Effect name
+                #   "intensity": 100,           # Effect intensity
+                #   "speed": 100                # Effect speed
+                #   "override_on": True         # Always turn the LEDs on
                 # }
                 # These should be created by the UI in this way, using the effect editor.
                 # It is *not* recommended that you configure these manually, it will probably go wrong.
+                # TO ADD ANYTHING TO THIS LIST a settings migration must be configured. See TPLINK smartplug plugin
+                # for inspiration :)
             },
         }
+
+    def get_settings_version(self):
+        return 1
 
     def on_settings_save(self, data):
         octoprint.plugin.SettingsPlugin.on_settings_save(self, data)

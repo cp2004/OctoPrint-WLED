@@ -12,6 +12,12 @@
 <td colspan="2">
     <span class="font-bold">Segment: </span><span data-bind="text: id"></span>
     <span class="font-bold gap-left">Effect: </span><span data-bind="text: effect"></span>
+    <span class="font-bold gap-left">Colors:</span>
+    {% for color in ["primary", "secondary", "tertiary"] %}
+    <svg class="gap-left text-align-center" width="15" height="15">
+        <rect rx="2" ry="2" width="15" height="15" style="stroke: black;stroke-width: 1px" data-bind="attr: {fill: color_{{ color }}}" />
+    </svg>
+    {% endfor %}
 </td>
 <td>
     <button class="btn btn-danger" title="Delete {{ identifier }} effect" data-bind="click: function(){ $root.deleteEffect('{{ identifier }}', $data)}">

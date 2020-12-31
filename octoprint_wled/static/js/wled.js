@@ -16,6 +16,8 @@ $(function () {
             effect.id = ko.observable(0);
             effect.brightness = ko.observable(200);
             effect.color_primary = ko.observable("#ffffff");
+            effect.color_secondary = ko.observable("#000000");
+            effect.color_tertiary = ko.observable("#000000");
             effect.effect = ko.observable("Solid");
             effect.intensity = ko.observable(127);
             effect.speed = ko.observable(127);
@@ -27,6 +29,8 @@ $(function () {
             object().id(0);
             object().brightness(200);
             object().color_primary("#ffffff");
+            object().color_secondary("#000000");
+            object().color_secondary("#000000");
             object().effect("Solid");
             object().intensity(127);
             object().speed(127);
@@ -69,6 +73,16 @@ $(function () {
                             plugin_settings.effects[name]
                                 .settings()
                                 [segment].color_primary()
+                        );
+                        effect_observables.color_secondary(
+                            plugin_settings.effects[name]
+                                .settings()
+                                [segment].color_secondary()
+                        );
+                        effect_observables.color_tertiary(
+                            plugin_settings.effects[name]
+                                .settings()
+                                [segment].color_tertiary()
                         );
                         effect_observables.effect(
                             plugin_settings.effects[name]
