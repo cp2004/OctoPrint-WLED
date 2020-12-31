@@ -5,21 +5,21 @@
             <div data-bind="visible: requestInProgress">
                 <p>
                     <span style="padding-right: 10px">
-                        <i class="fas fa-3x fa-sync fa-spin text-info pull-left"></i>
+                        <i class="fas fa-2x fa-sync fa-spin text-info pull-left"></i>
                     </span>
                     Loading...
                 </p>
             </div>
             <div data-bind="visible: statusConnected() && !requestInProgress()">
                 <p>
-                    <i class="fas fa-3x fa-check text-success pull-left" style="padding-right: 10px"></i>
+                    <i class="fas fa-2x fa-check text-success pull-left" style="padding-right: 10px"></i>
                     Connected to WLED <span data-bind="text: statusConnectionVersion"></span> at
                     <span data-bind="text: statusConnectionHost"></span>:<span data-bind="text: statusConnectionPort"></span>
                 </p>
             </div>
             <div data-bind="visible: !statusConnected() && !requestInProgress()">
                 <p>
-                    <i class="fas fa-3x fa-times text-error pull-left" style="padding-right: 10px;"></i>
+                    <i class="fas fa-2x fa-times text-error pull-left" style="padding-right: 10px;"></i>
                     <span data-bind="text: statusConnectionError"></span>
                 </p>
             </div>
@@ -32,5 +32,6 @@
         </button>
     </div>
 </div>
+{% include "effects/overview.jinja2" %}
 
 {% include "modals/connection.jinja2" %}

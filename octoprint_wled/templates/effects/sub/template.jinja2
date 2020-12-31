@@ -1,0 +1,20 @@
+{% import "effects/sub/macros.jinja2" as macros %}
+{% from "effects/sub/editmodal.jinja2" import editModal %}
+
+{% macro effectOverview(identifier, name, description=None) %}
+    <tr class="table-heading">
+    <td colspan="2">
+        <p>{{ name }}</p>
+    </td>
+    <td colspan="2">
+        <label class="inline">
+            Enabled: {{ macros.input("checkbox", "effects." + identifier + ".enabled") }}
+        </label>
+    </td>
+    <td colspan="2" class="text-align-center">
+        {{ macros.addEffectBtn(identifier) }}
+    </td>
+    </tr>
+    {{ macros.effectList(identifier) }}
+    {{ editModal(identifier, name) }}
+{% endmacro %}

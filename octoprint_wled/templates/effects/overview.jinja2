@@ -1,0 +1,29 @@
+{% import "effects/sub/template.jinja2" as template %}
+
+{% macro overview_heading(name, width="4") %}
+    <div class="span{{ width }}">
+        <p>
+            {{ name }}
+        </p>
+    </div>
+{% endmacro %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th width="10%"></th>
+        <th width="35%"></th>
+        <th width="15%"></th>
+        <th width="15%"></th>
+        <th width="15%"></th>
+        <th width="10%"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ template.effectOverview("idle", "Idle", "Fires when the printer is connected.") }}
+    {{ template.effectOverview("disconnected", "Disconnected") }}
+    {{ template.effectOverview("failed", "Failed") }}
+    {{ template.effectOverview("success", "Success") }}
+    {{ template.effectOverview("paused", "Paused") }}
+    </tbody>
+</table>

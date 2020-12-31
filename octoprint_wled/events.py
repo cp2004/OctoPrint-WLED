@@ -50,20 +50,23 @@ class PluginEventHandler:
 
         # Grab the settings
         # noinspection PyProtectedMember
-        effect_settings = self.plugin._settings.get(["effects", effect])
+        effect_enabled = self.plugin._settings.get_boolean(
+            ["effects", effect, "enabled"]
+        )
+        effect_settings = self.plugin._settings.get(["effects", effect, "settings"])
         lights_on = copy.copy(self.plugin.lights_on)
 
-        if not bool(effect_settings["enabled"]):
+        if not effect_enabled:
             self._logger.debug("Effect not enabled, not running")
             return
-        if not effect_settings["settings"]:
+        if not effect_settings:
             self._logger.warning(
                 "Effect enabled but no settings could be found, check config"
             )
             return
 
         # Loop through segments, set the brightness, report any problems
-        for segment in effect_settings["settings"]:
+        for segment in effect_settings:
             if segment["override_on"]:
                 lights_on = True
 

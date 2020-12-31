@@ -1,6 +1,38 @@
+$table-highlight-bg: rgba(0, 0, 0, 0.05);
+$table-highlight-color: #212529;
+$table-header-fs: large;
+$description-color: #5c5c5c;
+
+$gap-spacer: 5px;
+
 #settings_plugin_wled {
   .font-bold {
     font-weight: bold;
+  }
+  .gap-left {
+    margin-left: $gap-spacer;
+  }
+  .gap-right {
+    margin-right: $gap-spacer;
+  }
+  .text-align-center {
+    text-align: center;
+  }
+
+  tr.table-heading {
+    color: $table-highlight-color;
+    background: $table-highlight-bg;
+    // any element within a th or td
+    > * > *:not(.description) {
+      font-size: $table-header-fs;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+    > * > * > .description {
+      vertical-align: bottom;
+      color: $description-color;
+      font-size: small;
+    }
   }
 }
 #WLEDConnectionSettings {

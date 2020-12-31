@@ -1,0 +1,38 @@
+{% macro addEffectBtn(name) %}
+<button class="btn btn-primary" data-bind="click: function(){ addEffect('{{ name }}')}, enable: effects.{{ name }}.enabled">
+    <i class="fas fa-plus fa-fw"></i>
+    <title>Add {{ name }} effect</title>
+</button>
+{% endmacro %}
+
+{% macro effectList(identifier) %}
+<!-- ko foreach: effects.{{ identifier }}.segments() -->
+<tr data-bind="visible: $root.effects.{{ identifier }}.enabled">
+<td></td>
+<td colspan="2">
+    <span class="font-bold">Segment: </span><span data-bind="text: id"></span>
+    <span class="font-bold gap-left">Effect: </span><span data-bind="text: effect"></span>
+</td>
+<td>
+    <button class="btn btn-danger" title="Delete {{ identifier }} effect" data-bind="click: function(){ $root.deleteEffect('{{ identifier }}', $data)}">
+        <i class="fas fa-trash-alt fa-fw"></i>
+    </button>
+</td>
+<td>
+    <button class="btn btn-primary" title="Edit {{ identifier }} effect" data-bind="click: function(){ $root.editEffect('{{ identifier }}', $data) }">
+        <i class="far fa-edit fa-fw"></i>
+    </button>
+</td>
+<td></td>
+</tr>
+<!-- /ko -->
+{% endmacro %}
+
+{% macro input(type, binding, class=None) %}
+    {% if type == "checkbox" %}
+    {% set bind_type = "checked" %}
+    {% else %}
+    {% set bind_type = "value" %}
+    {% endif %}
+    <input type="{{ type }}" data-bind="{{ bind_type }}: {{ binding }}" {% if class %}class="{{ class }}"{% endif %}>
+{% endmacro %}

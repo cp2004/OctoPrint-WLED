@@ -72,39 +72,18 @@ class WLEDPlugin(
                 "verify_ssl": True,
             },
             "effects": {
-                "idle": {
-                    "enabled": True,
-                    "settings": [
-                        {
-                            "id": 0,
-                            "brightness": 255,
-                            "color_primary": "#ffffff",
-                            "effect": "Solid",
-                            "intensity": 100,
-                            "speed": 100,
-                            "override_on": True,
-                        },
-                        {
-                            "id": 1,
-                            "brightness": 255,
-                            "color_primary": "#ff0000",
-                            "effect": "Solid",
-                            "intensity": 100,
-                            "speed": 100,
-                            "override_on": True,
-                        },
-                    ],
-                },
+                "idle": {"enabled": True, "settings": []},
                 "disconnected": {"enabled": False, "settings": []},
                 "failed": {"enabled": False, "settings": []},
                 "success": {"enabled": False, "settings": []},
                 "paused": {"enabled": False, "settings": []},
                 # example settings entry, per segment
                 # {
+                #   "unique_id": 0            # UNIQUE internal ID of this segment. So it can be edited easily
                 #   "id": 0,                  # Segment ID
                 #   "brightness": 100,        # Segment brightness
                 #   "color_primary": #ffffff, # Effect colour
-                #   "effect": "effect_name",  # Effect name
+                #   "effect": "Solid",        # Effect name
                 #   "intensity": 100,         # Effect intensity
                 #   "speed": 100              # Effect speed
                 #   "override_on": True       # Always turn the LEDs on
