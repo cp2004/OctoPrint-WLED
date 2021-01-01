@@ -27,6 +27,14 @@ aims to provide a similar experience of high configurability with ease of use.
 
 ## Setup
 
+### Compatibility
+
+This plugin will only install on Python 3 systems. For a guide to upgrading (it's easy!), please see the
+[blog post (octoprint.org)](https://octoprint.org/blog/2020/09/10/upgrade-to-py3/).
+
+In addition, I can also only guarantee compatibility with OctoPrint 1.5.0 and newer. The icons definitely won't work in
+older versions. Please update!
+
 Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
 or manually using this URL:
 
