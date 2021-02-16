@@ -1,6 +1,6 @@
 # OctoPrint WLED Integration
 
-### This plugin is still under development, not recommended you install it yet!
+### This plugin is still under development, while it works it is incomplete. Contibutions to finish it are appreciated, please see [the TODO issue](https://github.com/cp2004/OctoPrint-WLED/issues/2)
 
 [WLED](https://github.com/Aircoookie/WLED) is an awesome project, [OctoPrint](https://octoprint.org)
 is yet another awesome project. What could be better than an OctoPrint plugin for connecting the two?
