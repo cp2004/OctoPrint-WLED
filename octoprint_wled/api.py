@@ -21,8 +21,6 @@ CMD_TOGGLE_FLASHLIGHT = "toggle_flashlight"
 
 
 class PluginAPI:
-    self flashlight_active = False
-
     def __init__(self, plugin):
         self.plugin = plugin  # type: octoprint_wled.WLEDPlugin
         # noinspection PyProtectedMember
@@ -36,6 +34,7 @@ class PluginAPI:
         # If this thread exists, then the response is 'in progress'
         self.get_thread: Optional[threading.Thread] = None
         self.post_test_thread: Optional[threading.Thread] = None
+        self.flashlight_active = False
 
     @staticmethod
     def get_api_commands() -> Dict[str, List[str]]:
