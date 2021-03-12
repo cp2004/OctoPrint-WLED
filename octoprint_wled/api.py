@@ -47,7 +47,7 @@ class PluginAPI:
                 self.test_wled, kwargs={"data": data}, name="WLED Test thread"
             )
             return flask.jsonify({"status": "started"})
-        if command = CMD_TOGGLE_FLASHLIGHT:
+        if command == CMD_TOGGLE_FLASHLIGHT:
             for (segmentIndex in range(self.plugin.wled.device.state.segments.count)):
                 self.plugin.wled.segment(
                     segment_id=segmentIndex,
