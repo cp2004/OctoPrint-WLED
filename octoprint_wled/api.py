@@ -52,9 +52,9 @@ class PluginAPI:
                 self.plugin.wled.segment(
                     segment_id=segmentIndex,
                     brightness=255,
-                    color_primary=255, 255, 255,
-                    color_secondary=0, 0, 0,
-                    color_tertiary=0, 0, 0,
+                    color_primary=(255, 255, 255),
+                    color_secondary=(0, 0, 0),
+                    color_tertiary=(0, 0, 0),
                     effect="solid",
                     intensity=255,
                     on=True,
