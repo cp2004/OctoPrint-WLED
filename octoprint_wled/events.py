@@ -27,9 +27,10 @@ class PluginEventHandler:
         self.event_to_effect: Dict[str, str] = {
             Events.CONNECTED: "idle",
             Events.DISCONNECTED: "disconnected",
+            Events.PRINT_STARTED: "started",
             Events.PRINT_FAILED: "failed",
             Events.PRINT_DONE: "success",
-            Events.PRINT_PAUSED: "paused",
+            Events.PRINT_PAUSED: "paused"
         }
 
         self.last_event: Optional[str] = None

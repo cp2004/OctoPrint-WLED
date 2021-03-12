@@ -75,6 +75,7 @@ class WLEDPlugin(
                 "idle": {"enabled": True, "settings": []},
                 "disconnected": {"enabled": False, "settings": []},
                 "failed": {"enabled": False, "settings": []},
+                "started": {"enabled": False, "settings": []},
                 "success": {"enabled": False, "settings": []},
                 "paused": {"enabled": False, "settings": []},
                 # example settings entry, per segment
