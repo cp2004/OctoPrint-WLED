@@ -313,7 +313,7 @@ $(function () {
             OctoPrint.simpleApiCommand(
                 "wled",
                 "toggle_flashlight"
-            ).done(updateFlashlightStatus)
+            ).done(self.updateFlashlightStatus)
             self.updateFlashlightStatus();
         };
     }
