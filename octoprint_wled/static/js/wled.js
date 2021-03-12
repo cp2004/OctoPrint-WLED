@@ -313,11 +313,13 @@ $(function () {
             OctoPrint.simpleApiCommand(
                 "wled",
                 "toggle_flashlight"
-            ).done(self.updateFlashlightStatus)
-            self.updateFlashlightStatus();
+            ).done(self.updateFlashlightStatus);
+        };
+
+        self.onBeforeBinding = function () {
+            OctoPrint.simpleApiGet("wled").done(self.updateFlashlightStatus);
         };
     }
-
 
     OCTOPRINT_VIEWMODELS.push({
         construct: WLEDNavbarViewModel,
