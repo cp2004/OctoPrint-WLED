@@ -17,6 +17,7 @@ from octoprint_wled.wled.exceptions import (
 )
 
 CMD_TEST = "test"
+CMD_TOGGLE_FLASHLIGHT = "toggle_flashlight"
 
 
 class PluginAPI:
@@ -46,6 +47,18 @@ class PluginAPI:
                 self.test_wled, kwargs={"data": data}, name="WLED Test thread"
             )
             return flask.jsonify({"status": "started"})
+        if command = CMD_TOGGLE_FLASHLIGHT:
+            for (segmentIndex in range(self.plugin.wled.device.state.segments.count)):
+                self.plugin.wled.segment(
+                    segment_id=segmentIndex,
+                    brightness=255,
+                    color_primary=255, 255, 255,
+                    color_secondary=0, 0, 0,
+                    color_tertiary=0, 0, 0,
+                    effect="solid",
+                    intensity=255,
+                    on=True,
+                )
 
     def on_api_get(self, request):
         if self.get_thread and self.get_thread.is_alive():

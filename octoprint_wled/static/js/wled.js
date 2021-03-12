@@ -286,6 +286,13 @@ $(function () {
                 }
             );
         };
+
+        self.toggle_flashlight = function () {
+            OctoPrint.simpleApiCommand(
+                "wled",
+                "toggle_flashlight"
+            ).done(update_light_status);
+        };
     }
     OCTOPRINT_VIEWMODELS.push({
         construct: WLEDViewModel,
