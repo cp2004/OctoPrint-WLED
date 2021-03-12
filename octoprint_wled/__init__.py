@@ -141,6 +141,11 @@ class WLEDPlugin(
             }
         }
 
+    # Template plugin
+    def get_template_configs(self):
+        return [
+            {"type": "generic", "custom_bindings": True},
+        ]
 
 __plugin_name__ = "WLED Integration"
 __plugin_version__ = __version__
