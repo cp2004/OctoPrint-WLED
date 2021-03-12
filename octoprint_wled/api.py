@@ -62,6 +62,10 @@ class PluginAPI:
                     intensity=255,
                     on=True,
                 )
+            self.plugin.wled.master(
+                brightness: 255,
+                on: True,
+            )
 
     def on_api_get(self, request):
         if self.get_thread and self.get_thread.is_alive():
