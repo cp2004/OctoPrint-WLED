@@ -5,7 +5,7 @@
  * License: AGPLv3
  */
 $(function () {
-    function WLEDViewModel(parameters) {
+    function WLEDSettingsViewModel(parameters) {
         console.log(OctoPrint);
         const self = this;
 
@@ -289,7 +289,7 @@ $(function () {
         };
     }
     OCTOPRINT_VIEWMODELS.push({
-        construct: WLEDViewModel,
+        construct: WLEDSettingsViewModel,
         dependencies: ["settingsViewModel"],
         elements: ["#settings_plugin_wled"],
     });
@@ -298,11 +298,9 @@ $(function () {
 
 $(function () {
     function WLEDNavbarViewModel(parameters) {
-        console.log(OctoPrint);
         const self = this;
 
         self.toggleFlashlight = function () {
-            console.log('Toggle Flashlight');
             OctoPrint.simpleApiCommand(
                 "wled",
                 "toggle_flashlight"
