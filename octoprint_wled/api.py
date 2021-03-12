@@ -63,8 +63,8 @@ class PluginAPI:
                     on=True,
                 )
             self.plugin.wled.master(
-                brightness: 255,
-                on: True,
+                brightness=255,
+                on=True,
             )
 
     def on_api_get(self, request):
