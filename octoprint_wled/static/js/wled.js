@@ -6,7 +6,7 @@
  */
 $(function () {
     function WLEDViewModel(parameters) {
-        console.log(this);
+        console.log(OctoPrint);
         var self = this;
 
         self.allEventNames = ["idle", "disconnected", "started", "failed", "success", "paused"]
