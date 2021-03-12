@@ -4,8 +4,11 @@
    href="javascript:void(0)"
    data-bind="click: toggleFlashlight"
 >
-    <!-- filled bulb -->
-    <i class="fas fa-lightbulb" data-bind="css: {display: flashlightIsActive ? '' : 'none'}"></i>
-    <!-- Outlined bulb -->
-    <i class="far fa-lightbulb" data-bind="css: {display: flashlightIsActive ? 'none' : ''}"></i>
+    {% if flashlightIsActive %}
+        <!-- filled bulb -->
+        <i class="fas fa-lightbulb"></i>
+    {% else %}
+        <!-- Outlined bulb -->
+        <i class="far fa-lightbulb"></i>
+    {% endif %}
 </a>
