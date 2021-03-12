@@ -71,6 +71,7 @@ class PluginAPI:
                 brightness=255,
                 on=True,
             )
+            self.flashlight_active = True
 
     def on_api_get(self, request):
         if self.get_thread and self.get_thread.is_alive():
