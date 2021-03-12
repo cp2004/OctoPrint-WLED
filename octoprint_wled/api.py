@@ -48,7 +48,7 @@ class PluginAPI:
             )
             return flask.jsonify({"status": "started"})
         if command == CMD_TOGGLE_FLASHLIGHT:
-            for (segmentIndex in range(self.plugin.wled.device.state.segments.count)):
+            for segmentIndex in range(self.plugin.wled.device.state.segments.count):
                 self.plugin.wled.segment(
                     segment_id=segmentIndex,
                     brightness=255,
