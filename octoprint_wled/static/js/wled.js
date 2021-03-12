@@ -6,6 +6,7 @@
  */
 $(function () {
     function WLEDViewModel(parameters) {
+        console.log(this);
         var self = this;
 
         self.allEventNames = ["idle", "disconnected", "started", "failed", "success", "paused"]
@@ -287,7 +288,7 @@ $(function () {
             );
         };
 
-        self.toggle_flashlight = function () {
+        self.toggleFlashlight = function () {
             OctoPrint.simpleApiCommand(
                 "wled",
                 "toggle_flashlight"
