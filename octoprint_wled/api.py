@@ -55,7 +55,7 @@ class PluginAPI:
             if self.flashlight_active:
                 self.plugin.events.on_event(self.plugin.events.last_event, None)
                 self.flashlight_active = False
-                return flask.jsonify({"on": False})
+                return flask.jsonify({"flashlightIsActive": False})
 
             for segmentIndex in range(len(self.plugin.wled.device.state.segments)):
                 self.plugin.wled.segment(
@@ -73,12 +73,15 @@ class PluginAPI:
                 on=True,
             )
             self.flashlight_active = True
-            return flask.jsonify({"on": True})
+            return flask.jsonify({"flashlightIsActive": True})
             
 
     def on_api_get(self, request):
         if self.get_thread and self.get_thread.is_alive():
-            return flask.jsonify({"status": "in_progress"})
+            return flask.jsonify({
+                "status": "in_progress",
+                flashlightIsActive: self.flashlight_active,
+            })
 
         self.get_thread = util.start_thread(
             self.get_wled_status,

@@ -306,7 +306,7 @@ $(function () {
         self.flashlightIsOn = ko.observable(false);
 
         self.updateFlashlightStatus = function (response) {
-            self.flashlightIsOn(on);
+            self.flashlightIsOn(response.flashlightIsActive);
         }
 
         self.toggleFlashlight = function () {
