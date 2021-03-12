@@ -29,7 +29,7 @@ class PluginEventHandler:
             Events.DISCONNECTED: "disconnected",
             Events.PRINT_FAILED: "failed",
             Events.PRINT_DONE: "success",
-            Events.PRINT_PAUSED: "paused"
+            Events.PRINT_PAUSED: "paused",
         }
 
         self.last_event: Optional[str] = None
