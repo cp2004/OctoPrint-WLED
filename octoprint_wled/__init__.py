@@ -57,6 +57,7 @@ class WLEDPlugin(
     # Event handling
     def on_event(self, event, payload):
         self.events.on_event(event, payload)
+        self.last_event = event
 
     # SettingsPlugin
     def get_settings_defaults(self) -> Dict[str, Any]:

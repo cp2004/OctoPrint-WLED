@@ -21,6 +21,8 @@ CMD_TOGGLE_FLASHLIGHT = "toggle_flashlight"
 
 
 class PluginAPI:
+    self flashlight_active = False
+
     def __init__(self, plugin):
         self.plugin = plugin  # type: octoprint_wled.WLEDPlugin
         # noinspection PyProtectedMember
@@ -51,6 +53,10 @@ class PluginAPI:
             )
             return flask.jsonify({"status": "started"})
         if command == CMD_TOGGLE_FLASHLIGHT:
+            if self.flashlight_active
+                self.plugin.events.on_event(self.plugin.events.last_event)
+                return
+
             for segmentIndex in range(len(self.plugin.wled.device.state.segments)):
                 self.plugin.wled.segment(
                     segment_id=segmentIndex,
