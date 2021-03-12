@@ -7,7 +7,7 @@
 $(function () {
     function WLEDViewModel(parameters) {
         console.log(OctoPrint);
-        var self = this;
+        const self = this;
 
         self.allEventNames = ["idle", "disconnected", "started", "failed", "success", "paused"]
 
@@ -287,17 +287,33 @@ $(function () {
                 }
             );
         };
-
-        self.toggleFlashlight = function () {
-            OctoPrint.simpleApiCommand(
-                "wled",
-                "toggle_flashlight"
-            ).done(update_light_status);
-        };
     }
     OCTOPRINT_VIEWMODELS.push({
         construct: WLEDViewModel,
         dependencies: ["settingsViewModel"],
         elements: ["#settings_plugin_wled"],
+    });
+});
+
+
+$(function () {
+    function WLEDNavbarViewModel(parameters) {
+        console.log(OctoPrint);
+        const self = this;
+
+        self.toggleFlashlight = function () {
+            console.log('Toggle Flashlight');
+            OctoPrint.simpleApiCommand(
+                "wled",
+                "toggle_flashlight"
+            );
+        };
+    }
+
+
+    OCTOPRINT_VIEWMODELS.push({
+        construct: WLEDNavbarViewModel,
+        dependencies: [],
+        elements: ["#wled_navbar"],
     });
 });
