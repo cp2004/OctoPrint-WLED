@@ -5,7 +5,7 @@
    data-bind="click: toggleFlashlight"
 >
     <!-- filled bulb -->
-    <i class="fas fa-lightbulb" data-bind="visible: flashlightIsOn"></i>
+    <i class="fas fa-lightbulb" data-bind="visible: flashlightIsActive()"></i>
     <!-- Outlined bulb -->
-    <i class="far fa-lightbulb" data-bind="visible: !flashlightIsOn"></i>
+    <i class="far fa-lightbulb" data-bind="visible: !flashlightIsActive()"></i>
 </a>

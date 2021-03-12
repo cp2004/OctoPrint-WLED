@@ -303,10 +303,10 @@ $(function () {
     function WLEDNavbarViewModel(parameters) {
         const self = this;
 
-        self.flashlightIsOn = ko.observable(false);
+        self.flashlightIsActive = ko.observable(false);
 
         self.updateFlashlightStatus = function (response) {
-            self.flashlightIsOn(response.flashlightIsActive);
+            self.flashlightIsActive(response.flashlightIsActive);
         }
 
         self.toggleFlashlight = function () {
