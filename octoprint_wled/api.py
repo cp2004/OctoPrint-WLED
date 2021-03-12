@@ -37,7 +37,10 @@ class PluginAPI:
 
     @staticmethod
     def get_api_commands() -> Dict[str, List[str]]:
-        return {CMD_TEST: ["config"]}
+        return {
+            CMD_TEST: ["config"],
+            CMD_TOGGLE_FLASHLIGHT: [],
+        }
 
     def on_api_command(self, command, data):
         if command == CMD_TEST:
