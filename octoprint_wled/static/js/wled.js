@@ -4,6 +4,9 @@
  * Author: Charlie Powell
  * License: AGPLv3
  */
+
+const ko = window.ko;
+
 $(function () {
     function WLEDSettingsViewModel(parameters) {
         console.log(OctoPrint);
@@ -300,11 +303,18 @@ $(function () {
     function WLEDNavbarViewModel(parameters) {
         const self = this;
 
+        self.flashlightIsOn = ko.observable(false);
+
+        self.updateFlashlightStatus = function (response) {
+            self.flashlightIsOn(on);
+        }
+
         self.toggleFlashlight = function () {
             OctoPrint.simpleApiCommand(
                 "wled",
                 "toggle_flashlight"
-            );
+            ).done(updateFlashlightStatus)
+            self.updateFlashlightStatus();
         };
     }
 

@@ -54,7 +54,8 @@ class PluginAPI:
         if command == CMD_TOGGLE_FLASHLIGHT:
             if self.flashlight_active:
                 self.plugin.events.on_event(self.plugin.events.last_event, None)
-                return
+                self.flashlight_active = False
+                return flask.jsonify({"on": False})
 
             for segmentIndex in range(len(self.plugin.wled.device.state.segments)):
                 self.plugin.wled.segment(
@@ -72,6 +73,8 @@ class PluginAPI:
                 on=True,
             )
             self.flashlight_active = True
+            return flask.jsonify({"on": True})
+            
 
     def on_api_get(self, request):
         if self.get_thread and self.get_thread.is_alive():
