@@ -36,6 +36,7 @@ class PluginEventHandler:
 
     def on_event(self, event, payload) -> None:
         if event in self.event_to_effect.keys():
+            self.plugin.api.flashlight_active = False
             self.last_event = event
             start_thread(
                 self.update_effect, kwargs={"effect": self.event_to_effect[event]}

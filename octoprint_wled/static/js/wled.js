@@ -4,9 +4,12 @@
  * Author: Charlie Powell
  * License: AGPLv3
  */
+
+const ko = window.ko;
+
 $(function () {
-    function WLEDViewModel(parameters) {
-        var self = this;
+    function WLEDSettingsViewModel(parameters) {
+        const self = this;
 
         self.settingsViewModel = parameters[0];
 
@@ -315,8 +318,38 @@ $(function () {
         };
     }
     OCTOPRINT_VIEWMODELS.push({
-        construct: WLEDViewModel,
+        construct: WLEDSettingsViewModel,
         dependencies: ["settingsViewModel"],
         elements: ["#settings_plugin_wled"],
+    });
+});
+
+
+$(function () {
+    function WLEDNavbarViewModel(parameters) {
+        const self = this;
+
+        self.flashlightIsActive = ko.observable(false);
+
+        self.updateFlashlightStatus = function (response) {
+            self.flashlightIsActive(response.flashlightIsActive);
+        }
+
+        self.toggleFlashlight = function () {
+            OctoPrint.simpleApiCommand(
+                "wled",
+                "toggle_flashlight"
+            ).done(self.updateFlashlightStatus);
+        };
+
+        self.onBeforeBinding = function () {
+            OctoPrint.simpleApiGet("wled").done(self.updateFlashlightStatus);
+        };
+    }
+
+    OCTOPRINT_VIEWMODELS.push({
+        construct: WLEDNavbarViewModel,
+        dependencies: [],
+        elements: ["#wled_navbar"],
     });
 });

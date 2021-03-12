@@ -17,6 +17,7 @@ from octoprint_wled.wled.exceptions import (
 )
 
 CMD_TEST = "test"
+CMD_TOGGLE_FLASHLIGHT = "toggle_flashlight"
 
 
 class PluginAPI:
@@ -33,10 +34,14 @@ class PluginAPI:
         # If this thread exists, then the response is 'in progress'
         self.get_thread: Optional[threading.Thread] = None
         self.post_test_thread: Optional[threading.Thread] = None
+        self.flashlight_active = False
 
     @staticmethod
     def get_api_commands() -> Dict[str, List[str]]:
-        return {CMD_TEST: ["config"]}
+        return {
+            CMD_TEST: ["config"],
+            CMD_TOGGLE_FLASHLIGHT: [],
+        }
 
     def on_api_command(self, command, data):
         if command == CMD_TEST:
@@ -46,10 +51,37 @@ class PluginAPI:
                 self.test_wled, kwargs={"data": data}, name="WLED Test thread"
             )
             return flask.jsonify({"status": "started"})
+        if command == CMD_TOGGLE_FLASHLIGHT:
+            if self.flashlight_active:
+                self.plugin.events.on_event(self.plugin.events.last_event, None)
+                self.flashlight_active = False
+                return flask.jsonify({"flashlightIsActive": False})
+
+            for segmentIndex in range(len(self.plugin.wled.device.state.segments)):
+                self.plugin.wled.segment(
+                    segment_id=segmentIndex,
+                    brightness=255,
+                    color_primary=(255, 255, 255),
+                    color_secondary=(0, 0, 0),
+                    color_tertiary=(0, 0, 0),
+                    effect="solid",
+                    intensity=255,
+                    on=True,
+                )
+            self.plugin.wled.master(
+                brightness=255,
+                on=True,
+            )
+            self.flashlight_active = True
+            return flask.jsonify({"flashlightIsActive": True})
+
 
     def on_api_get(self, request):
         if self.get_thread and self.get_thread.is_alive():
-            return flask.jsonify({"status": "in_progress"})
+            return flask.jsonify({
+                "status": "in_progress",
+                flashlightIsActive: self.flashlight_active,
+            })
 
         self.get_thread = util.start_thread(
             self.get_wled_status,

@@ -57,6 +57,7 @@ class WLEDPlugin(
     # Event handling
     def on_event(self, event, payload):
         self.events.on_event(event, payload)
+        self.last_event = event
 
     # SettingsPlugin
     def get_settings_defaults(self) -> Dict[str, Any]:
@@ -140,6 +141,11 @@ class WLEDPlugin(
             }
         }
 
+    # Template plugin
+    def get_template_configs(self):
+        return [
+            {"type": "generic", "custom_bindings": True},
+        ]
 
 __plugin_name__ = "WLED Integration"
 __plugin_version__ = __version__
