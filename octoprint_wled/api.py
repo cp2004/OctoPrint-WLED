@@ -52,7 +52,7 @@ class PluginAPI:
             )
             return flask.jsonify({"status": "started"})
         if command == CMD_TOGGLE_FLASHLIGHT:
-            if self.flashlight_active == True
+            if self.flashlight_active:
                 self.plugin.events.on_event(self.plugin.events.last_event)
                 return
 
