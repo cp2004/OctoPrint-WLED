@@ -1,4 +1,4 @@
-exclude: ^(translations/|.*\.css|.*\.svg|octoprint_wled/static/webfonts|versioneer.py)
+exclude: ^(translations/|.*\.css|.*\.svg|octoprint_wled/static/webfonts|versioneer.py|octoprint_wled/_version.py)
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
@@ -24,6 +24,7 @@ repos:
     rev: v5.5.4
     hooks:
       - id: isort
+        args: ["--profile", "black", "--filter-files"]
   - repo: https://github.com/psf/black
     rev: stable
     hooks:

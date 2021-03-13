@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import copy
 import logging
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
 
 from octoprint.events import Events
 
@@ -13,7 +13,6 @@ from octoprint_wled.wled.exceptions import (
     WLEDConnectionError,
     WLEDConnectionTimeoutError,
     WLEDEmptyResponseError,
-    WLEDError,
 )
 
 
