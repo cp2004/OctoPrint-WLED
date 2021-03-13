@@ -13,7 +13,6 @@ from octoprint_wled.wled.exceptions import (
     WLEDConnectionError,
     WLEDConnectionTimeoutError,
     WLEDEmptyResponseError,
-    WLEDError,
 )
 
 CMD_TEST = "test"
