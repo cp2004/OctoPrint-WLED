@@ -16,6 +16,7 @@ aims to provide a similar experience of high configurability with ease of use.
 - Reacting to printer states including:
   - Idle
   - Disconnected
+  - Print started
   - Print success
   - Print failed
   - Print paused

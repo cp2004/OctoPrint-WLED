@@ -8,6 +8,15 @@ $(function () {
     function WLEDViewModel(parameters) {
         var self = this;
 
+        self.allEventNames = [
+            "idle",
+            "disconnected",
+            "started",
+            "failed",
+            "success",
+            "paused",
+        ];
+
         self.settingsViewModel = parameters[0];
 
         self.createEffectObservables = function (u_id = 0) {
@@ -43,112 +52,75 @@ $(function () {
 
         self.setEffectsFromSettings = function () {
             let plugin_settings = self.settingsViewModel.settings.plugins.wled;
-            _.forEach(
-                ["idle", "disconnected", "failed", "success", "paused"],
-                function (name) {
-                    self.effects[name].enabled(
-                        plugin_settings.effects[name].enabled()
+            _.forEach(self.allEventNames, function (name) {
+                self.effects[name].enabled(
+                    plugin_settings.effects[name].enabled()
+                );
+                self.effects[name].segments([]);
+                for (let segment in plugin_settings.effects[name].settings()) {
+                    let effect_observables = self.createEffectObservables();
+                    effect_observables.unique_id(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].unique_id()
                     );
-                    self.effects[name].segments([]);
-                    for (let segment in plugin_settings.effects[
-                        name
-                    ].settings()) {
-                        let effect_observables = self.createEffectObservables();
-                        effect_observables.unique_id(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].unique_id()
-                        );
-                        effect_observables.id(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].id()
-                        );
-                        effect_observables.brightness(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].brightness()
-                        );
-                        effect_observables.color_primary(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].color_primary()
-                        );
-                        effect_observables.color_secondary(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].color_secondary()
-                        );
-                        effect_observables.color_tertiary(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].color_tertiary()
-                        );
-                        effect_observables.effect(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].effect()
-                        );
-                        effect_observables.speed(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].speed()
-                        );
-                        effect_observables.override_on(
-                            plugin_settings.effects[name]
-                                .settings()
-                                [segment].override_on()
-                        );
-                        self.effects[name].segments.push(effect_observables);
-                    }
+                    effect_observables.id(
+                        plugin_settings.effects[name].settings()[segment].id()
+                    );
+                    effect_observables.brightness(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].brightness()
+                    );
+                    effect_observables.color_primary(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].color_primary()
+                    );
+                    effect_observables.color_secondary(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].color_secondary()
+                    );
+                    effect_observables.color_tertiary(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].color_tertiary()
+                    );
+                    effect_observables.effect(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].effect()
+                    );
+                    effect_observables.speed(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].speed()
+                    );
+                    effect_observables.override_on(
+                        plugin_settings.effects[name]
+                            .settings()
+                            [segment].override_on()
+                    );
+                    self.effects[name].segments.push(effect_observables);
                 }
-            );
+            });
         };
 
         self.effects = (function () {
             let effects = {};
 
-            effects.idle = (function () {
-                let idle = {};
-                idle.enabled = ko.observable();
-                idle.segments = ko.observableArray([]);
-                idle.editing = ko.observable(self.createEffectObservables());
-                return idle;
-            })();
-
-            effects.disconnected = (function () {
-                let disconnected = {};
-                disconnected.enabled = ko.observable();
-                disconnected.segments = ko.observableArray([]);
-                disconnected.editing = ko.observable(
-                    self.createEffectObservables()
-                );
-                return disconnected;
-            })();
-
-            effects.failed = (function () {
-                let failed = {};
-                failed.enabled = ko.observable();
-                failed.segments = ko.observableArray([]);
-                failed.editing = ko.observable(self.createEffectObservables());
-                return failed;
-            })();
-
-            effects.success = (function () {
-                let success = {};
-                success.enabled = ko.observable();
-                success.segments = ko.observableArray([]);
-                success.editing = ko.observable(self.createEffectObservables());
-                return success;
-            })();
-
-            effects.paused = (function () {
-                let paused = {};
-                paused.enabled = ko.observable();
-                paused.segments = ko.observableArray([]);
-                paused.editing = ko.observable(self.createEffectObservables());
-                return paused;
-            })();
+            _.forEach(self.allEventNames, function (eventName) {
+                effects[eventName] = (function () {
+                    let eventEffect = {};
+                    eventEffect.enabled = ko.observable();
+                    eventEffect.segments = ko.observableArray([]);
+                    eventEffect.editing = ko.observable(
+                        self.createEffectObservables()
+                    );
+                    return eventEffect;
+                })();
+            });
 
             return effects;
         })();
@@ -302,7 +274,14 @@ $(function () {
 
         self.onSettingsBeforeSave = function () {
             _.forEach(
-                ["idle", "disconnected", "failed", "success", "paused"],
+                [
+                    "idle",
+                    "disconnected",
+                    "started",
+                    "failed",
+                    "success",
+                    "paused",
+                ],
                 function (name) {
                     self.settingsViewModel.settings.plugins.wled.effects[
                         name
