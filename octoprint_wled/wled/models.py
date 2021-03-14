@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -17,7 +16,7 @@ class Nightlight:
     target_brightness: int
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> Nightlight:
+    def from_dict(data: dict[str, Any]) -> Nightlight:
         """Return Nightlight object from WLED API response."""
         nightlight = data.get("nl", {})
         return Nightlight(
@@ -36,7 +35,7 @@ class Sync:
     send: bool
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> Sync:
+    def from_dict(data: dict[str, Any]) -> Sync:
         """Return Sync object from WLED API response."""
         sync = data.get("udpn", {})
         return Sync(send=sync.get("send", False), receive=sync.get("recv", False))
@@ -64,9 +63,9 @@ class Segment:
 
     brightness: int
     clones: int
-    color_primary: Union[Tuple[int, int, int, int], Tuple[int, int, int]]
-    color_secondary: Union[Tuple[int, int, int, int], Tuple[int, int, int]]
-    color_tertiary: Union[Tuple[int, int, int, int], Tuple[int, int, int]]
+    color_primary: tuple[int, int, int, int] | tuple[int, int, int]
+    color_secondary: tuple[int, int, int, int] | tuple[int, int, int]
+    color_tertiary: tuple[int, int, int, int] | tuple[int, int, int]
     effect: Effect
     intensity: int
     length: int
@@ -82,10 +81,10 @@ class Segment:
     @staticmethod
     def from_dict(
         segment_id: int,
-        data: Dict[str, Any],
+        data: dict[str, Any],
         *,
-        effects: List[Effect],
-        palettes: List[Palette],
+        effects: list[Effect],
+        palettes: list[Palette],
         state_on: bool,
         state_brightness: int,
     ) -> Segment:
@@ -144,7 +143,7 @@ class Leds:
     max_segments: int
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> Leds:
+    def from_dict(data: dict[str, Any]) -> Leds:
         """Return Leds object from WLED API response."""
         leds = data.get("leds", {})
         return Leds(
@@ -167,7 +166,7 @@ class Wifi:
     signal: int
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> Optional[Wifi]:
+    def from_dict(data: dict[str, Any]) -> Wifi | None:
         """Return Wifi object form WLED API response."""
         if "wifi" not in data:
             return None
@@ -202,10 +201,10 @@ class Info:
     uptime: int
     version_id: str
     version: str
-    wifi: Optional[Wifi]
+    wifi: Wifi | None
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> Info:
+    def from_dict(data: dict[str, Any]) -> Info:
         """Return Info object from WLED API response."""
         return Info(
             architecture=data.get("arch", "Unknown"),
@@ -239,7 +238,7 @@ class State:
     on: bool
     playlist: int
     preset: int
-    segments: List[Segment]
+    segments: list[Segment]
     sync: Sync
     transition: int
 
@@ -255,7 +254,7 @@ class State:
 
     @staticmethod
     def from_dict(
-        data: Dict[str, Any], effects: List[Effect], palettes: List[Palette]
+        data: dict[str, Any], effects: list[Effect], palettes: list[Palette]
     ) -> State:
         """Return State object from WLED API response."""
         brightness = data.get("bri", 1)
@@ -288,9 +287,9 @@ class State:
 class Device:
     """Object holding all information of WLED."""
 
-    effects: List[Effect] = []
+    effects: list[Effect] = []
     info: Info
-    palettes: List[Palette] = []
+    palettes: list[Palette] = []
     state: State
 
     def __init__(self, data: dict):

@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, division, unicode_literals
-
 from typing import Any, Dict, List, Optional
 
 import octoprint.plugin

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import versioneer
 
 # The plugin's identifier, has to be unique

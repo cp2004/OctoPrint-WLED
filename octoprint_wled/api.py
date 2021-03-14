@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import logging
 import threading
 from typing import Dict, List, Optional

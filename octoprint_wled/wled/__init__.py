@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Synchronous Python Client for WLED
 Based on the library by Franck Nijhof https://github.com/frenck/python-wled
