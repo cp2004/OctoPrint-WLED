@@ -21,4 +21,8 @@
 #WLEDConnectionSettings .text-align-left {
   text-align: left !important; }
 
+.wled-nav-button {
+  float: left;
+  font-size: 20px; }
+
 /*# sourceMappingURL=wled.css.map */

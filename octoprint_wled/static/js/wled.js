@@ -4,6 +4,8 @@
  * Author: Charlie Powell
  * License: AGPLv3
  */
+const ko = window.ko;
+
 $(function () {
     function WLEDViewModel(parameters) {
         var self = this;
@@ -18,6 +20,8 @@ $(function () {
         ];
 
         self.settingsViewModel = parameters[0];
+
+        self.lights_on = ko.observable(true);
 
         self.createEffectObservables = function (u_id = 0) {
             let effect = {};
@@ -216,6 +220,15 @@ $(function () {
             }
         };
 
+        self.toggle_lights = function () {
+            OctoPrint.simpleApiCommand(
+                "wled",
+                self.lights_on() ? "lights_off" : "lights_on"
+            ).done(function (response) {
+                self.lights_on(response.lights_on);
+            });
+        };
+
         // API GET response handler
         // Response is displayed in connection status section of settings
         self.statusConnected = ko.observable(false);
@@ -257,7 +270,9 @@ $(function () {
         self.onAfterBinding = self.onEventSettingsUpdated = function () {
             self.setEffectsFromSettings();
             self.requestInProgress(true);
-            OctoPrint.simpleApiGet("wled");
+            OctoPrint.simpleApiGet("wled").done(function (response) {
+                self.lights_on(response.lights_on);
+            });
         };
 
         self.onDataUpdaterPluginMessage = function (plugin, data) {
@@ -296,6 +311,6 @@ $(function () {
     OCTOPRINT_VIEWMODELS.push({
         construct: WLEDViewModel,
         dependencies: ["settingsViewModel"],
-        elements: ["#settings_plugin_wled"],
+        elements: ["#settings_plugin_wled", "#navbar_plugin_wled"],
     });
 });

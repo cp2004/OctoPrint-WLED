@@ -1,6 +1,6 @@
 import logging
 import threading
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import flask
 
@@ -14,6 +14,8 @@ from octoprint_wled.wled.exceptions import (
 )
 
 CMD_TEST = "test"
+CMD_LIGHTS_ON = "lights_on"
+CMD_LIGHTS_OFF = "lights_off"
 
 
 class PluginAPI:
@@ -23,7 +25,7 @@ class PluginAPI:
         self._settings = plugin._settings
         self._logger: logging.Logger = logging.getLogger("octoprint.plugins.wled.api")
 
-        # This API is asynchronous
+        # This API is in most places asynchronous
         # All methods return after creating a thread, then send a message
         # on the websocket later. This prevents long running WLED API calls from
         # blocking the API/frontend.
@@ -33,27 +35,55 @@ class PluginAPI:
 
     @staticmethod
     def get_api_commands() -> Dict[str, List[str]]:
-        return {CMD_TEST: ["config"]}
+        return {CMD_TEST: ["config"], CMD_LIGHTS_ON: [], CMD_LIGHTS_OFF: []}
 
-    def on_api_command(self, command, data):
+    def static_api_response(self) -> Dict[str, Any]:
+        """
+        Respond with current state of the plugin, lights and anything else that is not async
+        :return: (dict) the current static state
+        """
+        return {"lights_on": self.plugin.lights_on}
+
+    def with_static_response(self, data: dict) -> flask.Response:
+        data.update(self.static_api_response())
+        return flask.jsonify(data)
+
+    def on_api_command(self, command: str, data: dict):
         if command == CMD_TEST:
             if self.post_test_thread and self.post_test_thread.is_alive():
                 return flask.jsonify({"status": "in_progress"})
             self.post_test_thread = util.start_thread(
                 self.test_wled, kwargs={"data": data}, name="WLED Test thread"
             )
-            return flask.jsonify({"status": "started"})
+            return self.with_static_response({"status": "started"})
 
-    def on_api_get(self, request):
+        elif command == CMD_LIGHTS_ON:
+            try:
+                self.plugin.activate_lights()
+            except Exception as e:
+                self._logger.exception(repr(e))
+                return self.with_static_response({"error": True})
+
+        elif command == CMD_LIGHTS_OFF:
+            try:
+                self.plugin.deactivate_lights()
+            except Exception as e:
+                self._logger.exception(repr(e))
+                return self.with_static_response({"error": True})
+
+        # Generic empty response here
+        return self.with_static_response({})
+
+    def on_api_get(self, request) -> flask.Response:
         if self.get_thread and self.get_thread.is_alive():
-            return flask.jsonify({"status": "in_progress"})
+            return self.with_static_response({"status": "in_progress"})
 
         self.get_thread = util.start_thread(
             self.get_wled_status,
             kwargs={"request": request},
             name="WLED GET request thread",
         )
-        return flask.jsonify({"status": "started"})
+        return self.with_static_response({"status": "started"})
 
     def get_wled_status(self, request) -> None:
         wled = self.plugin.wled
