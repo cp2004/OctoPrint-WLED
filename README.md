@@ -1,6 +1,7 @@
 # OctoPrint WLED Integration
 
-### This plugin is still under development, while it works it is incomplete. Contibutions to finish it are appreciated, please see [the TODO issue](https://github.com/cp2004/OctoPrint-WLED/issues/2)
+### This plugin is still under development, while it works it is incomplete. 
+### If you want to see what is coming soon, have a look at the [the TODO issue](https://github.com/cp2004/OctoPrint-WLED/issues/2)
 
 [WLED](https://github.com/Aircoookie/WLED) is an awesome project, [OctoPrint](https://octoprint.org)
 is yet another awesome project. What could be better than an OctoPrint plugin for connecting the two?
@@ -35,6 +36,8 @@ This plugin will only install on Python 3 systems. For a guide to upgrading (it'
 
 In addition, I can also only guarantee compatibility with OctoPrint 1.5.0 and newer. The icons definitely won't work in
 older versions. Please update!
+
+### Install
 
 Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
 or manually using this URL:
