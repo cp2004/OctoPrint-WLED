@@ -118,6 +118,7 @@ class WLEDPlugin(
                 # TO ADD ANYTHING TO THIS LIST a settings migration must be configured. See TPLINK smartplug plugin
                 # for inspiration :)
             },
+            "development": False,
         }
 
     def get_settings_version(self):
@@ -130,9 +131,14 @@ class WLEDPlugin(
 
     # AssetPlugin
     def get_assets(self) -> Dict[str, List[str]]:
+        if self._settings.get_boolean(["development"]):
+            js = ["src/wled.js"]
+        else:
+            js = ["dist/wled.js"]
+
         return {
-            "js": ["js/wled.js"],
-            "css": ["css/wled.css"],
+            "js": js,
+            "css": ["dist/wled.css"],
         }
 
     # Software Update hook
