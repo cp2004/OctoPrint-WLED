@@ -34,7 +34,7 @@ $(function () {
             effect.effect = ko.observable("Solid");
             effect.intensity = ko.observable(127);
             effect.speed = ko.observable(127);
-            effect.override_on = ko.observable(true);
+            effect.override_on = ko.observable(false);
             return effect;
         };
 
@@ -47,7 +47,7 @@ $(function () {
             object().effect("Solid");
             object().intensity(127);
             object().speed(127);
-            object().override_on(true);
+            object().override_on(false);
         };
 
         self.setEditingObservables = function (effect, data) {
