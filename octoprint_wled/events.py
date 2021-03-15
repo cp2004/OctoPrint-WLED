@@ -55,6 +55,7 @@ class PluginEventHandler:
         )
         effect_settings = self.plugin._settings.get(["effects", effect, "settings"])
         lights_on = copy.copy(self.plugin.lights_on)
+        turn_lights_on = False
 
         if not effect_enabled:
             self._logger.debug("Effect not enabled, not running")
@@ -68,13 +69,14 @@ class PluginEventHandler:
         # Loop through segments, set the brightness, report any problems
         for segment in effect_settings:
             if segment["override_on"]:
-                lights_on = True
+                turn_lights_on = True
+
+            self._logger.debug(
+                f"setting {segment['effect']} to segment {segment['id']}"
+            )
 
             try:
                 # Set the effect on WLED
-                self._logger.debug(
-                    f"setting {segment['effect']} to segment {segment['id']}"
-                )
                 self.plugin.wled.segment(
                     segment_id=int(segment["id"]),
                     brightness=int(segment["brightness"]),
@@ -114,6 +116,9 @@ class PluginEventHandler:
             if response:
                 # Update the UI if necessary
                 self.plugin.send_message("event_update_effect", response)
+
+        if turn_lights_on:
+            self.plugin.activate_lights()
 
     def restart(self) -> None:
         """

@@ -36,20 +36,29 @@ class WLEDPlugin(
             self.wled = None
 
     def activate_lights(self) -> None:
-        self.wled.master(on=True)
+        self._logger.info("Turning WLED lights on")
+        try:
+            self.wled.master(on=True)
+        except Exception as e:
+            self._logger.error("Error while turning WLED lights on")
+            self._logger.exception(repr(e))
+
         # If we got this far there was no error
         # Notify the UI
         self.send_message("lights", {"on": True})
         self.lights_on = True
-        self._logger.info("Turning WLED lights on")
 
     def deactivate_lights(self) -> None:
-        self.wled.master(on=False)
+        self._logger.info("Turning WLED lights off")
+        try:
+            self.wled.master(on=False)
+        except Exception as e:
+            self._logger.error("Error while turning WLED lights off")
+            self._logger.exception(repr(e))
         # If we got this far there was no error
         # Notify the UI
         self.send_message("lights", {"on": False})
         self.lights_on = False
-        self._logger.info("Turning WLED lights off")
 
     # SimpleApiPlugin
     def get_api_commands(self) -> Dict[str, List[Optional[str]]]:
