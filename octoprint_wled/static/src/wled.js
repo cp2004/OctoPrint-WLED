@@ -5,12 +5,13 @@
  * License: AGPLv3
  */
 const ko = window.ko;
+const OctoPrint = window.OctoPrint;
 
 $(function () {
-    function WLEDViewModel(parameters) {
-        var self = this;
+    const WLEDViewModel = (parameters) => {
+        const self = this;
 
-        self.allEventNames = [
+        const allEventNames = [
             "idle",
             "disconnected",
             "started",
@@ -23,8 +24,8 @@ $(function () {
 
         self.lights_on = ko.observable(true);
 
-        self.createEffectObservables = function (u_id = 0) {
-            let effect = {};
+        self.createEffectObservables = (u_id = 0) => {
+            const effect = {};
             effect.unique_id = ko.observable(u_id);
             effect.id = ko.observable(0);
             effect.brightness = ko.observable(200);
@@ -38,85 +39,60 @@ $(function () {
             return effect;
         };
 
-        self.setDefaultEffectObservables = function (object, uid) {
-            object().id(0);
-            object().brightness(200);
-            object().color_primary("#ffffff");
-            object().color_secondary("#000000");
-            object().color_secondary("#000000");
-            object().effect("Solid");
-            object().intensity(127);
-            object().speed(127);
-            object().override_on(false);
-        };
-
-        self.setEditingObservables = function (effect, data) {
+        self.setEditingObservables = (effect, data) => {
             effect.editing(data);
         };
 
-        self.setEffectsFromSettings = function () {
-            let plugin_settings = self.settingsViewModel.settings.plugins.wled;
-            _.forEach(self.allEventNames, function (name) {
-                self.effects[name].enabled(
-                    plugin_settings.effects[name].enabled()
-                );
+        self.setEffectsFromSettings = () => {
+            const settings = self.settingsViewModel.settings.plugins.wled;
+            allEventNames.forEach((name) => {
+                self.effects[name].enabled(settings.effects[name].enabled());
                 self.effects[name].segments([]);
-                for (let segment in plugin_settings.effects[name].settings()) {
-                    let effect_observables = self.createEffectObservables();
-                    effect_observables.unique_id(
-                        plugin_settings.effects[name]
-                            .settings()
-                            [segment].unique_id()
+                settings.effects[name].forEach((segment) => {
+                    let observables = self.createEffectObservables();
+                    observables.unique_id(
+                        settings.effects[name].settings()[segment].unique_id()
                     );
-                    effect_observables.id(
-                        plugin_settings.effects[name].settings()[segment].id()
+                    observables.id(
+                        settings.effects[name].settings()[segment].id()
                     );
-                    effect_observables.brightness(
-                        plugin_settings.effects[name]
-                            .settings()
-                            [segment].brightness()
+                    observables.brightness(
+                        settings.effects[name].settings()[segment].brightness()
                     );
-                    effect_observables.color_primary(
-                        plugin_settings.effects[name]
+                    observables.color_primary(
+                        settings.effects[name]
                             .settings()
                             [segment].color_primary()
                     );
-                    effect_observables.color_secondary(
-                        plugin_settings.effects[name]
+                    observables.color_secondary(
+                        settings.effects[name]
                             .settings()
                             [segment].color_secondary()
                     );
-                    effect_observables.color_tertiary(
-                        plugin_settings.effects[name]
+                    observables.color_tertiary(
+                        settings.effects[name]
                             .settings()
                             [segment].color_tertiary()
                     );
-                    effect_observables.effect(
-                        plugin_settings.effects[name]
-                            .settings()
-                            [segment].effect()
+                    observables.effect(
+                        settings.effects[name].settings()[segment].effect()
                     );
-                    effect_observables.speed(
-                        plugin_settings.effects[name]
-                            .settings()
-                            [segment].speed()
+                    observables.speed(
+                        settings.effects[name].settings()[segment].speed()
                     );
-                    effect_observables.override_on(
-                        plugin_settings.effects[name]
-                            .settings()
-                            [segment].override_on()
+                    observables.override_on(
+                        settings.effects[name].settings()[segment].override_on()
                     );
-                    self.effects[name].segments.push(effect_observables);
-                }
+                    self.effects[name].segments.push(observables);
+                });
             });
         };
 
-        self.effects = (function () {
-            let effects = {};
-
-            _.forEach(self.allEventNames, function (eventName) {
+        self.effects = (() => {
+            const effects = {};
+            allEventNames.forEach((eventName) => {
                 effects[eventName] = (function () {
-                    let eventEffect = {};
+                    const eventEffect = {};
                     eventEffect.enabled = ko.observable();
                     eventEffect.segments = ko.observableArray([]);
                     eventEffect.editing = ko.observable(
@@ -125,19 +101,17 @@ $(function () {
                     return eventEffect;
                 })();
             });
-
             return effects;
         })();
-        console.log(self.effects);
 
-        self.addEffect = function (name) {
-            let uid = self.new_uid(name);
-            let new_effect = self.createEffectObservables(uid);
+        self.addEffect = (name) => {
+            const uid = self.new_uid(name);
+            const new_effect = self.createEffectObservables(uid);
             self.effects[name].segments.push(new_effect);
             self.editEffect(name, new_effect);
         };
 
-        self.new_uid = function (name) {
+        self.new_uid = (name) => {
             let highest_uid = 0;
             _.forEach(self.effects[name].segments(), function (segment) {
                 if (segment.unique_id() > highest_uid) {
@@ -147,37 +121,36 @@ $(function () {
             return highest_uid + 1;
         };
 
-        self.editEffect = function (name, data) {
+        self.editEffect = (name, data) => {
             // name: effect type (eg. 'idle')
             // data: object for editing effect
-            let effect = self.effects[name];
+            const effect = self.effects[name];
             self.setEditingObservables(effect, data);
             self.showEditModal(name);
         };
 
-        self.saveEdit = function (name, data) {
-            let effect = self.effects[name];
-            let segment_unique_id = data.unique_id();
-            for (let segment in self.effects[name].segments()) {
+        self.saveEdit = (name, data) => {
+            const segment_unique_id = data.unique_id();
+            self.effects[name].segments().forEach((segment) => {
                 if (
                     self.effects[name].segments()[segment].unique_id() ===
                     segment_unique_id
                 ) {
                     self.effects[name].segments()[segment] = data;
                 }
-            }
+            });
             self.hideEditModal(name);
         };
 
-        self.deleteEffect = function (name, data) {
+        self.deleteEffect = (name, data) => {
             self.effects[name].segments.remove(data);
         };
 
-        self.showEditModal = function (name) {
+        self.showEditModal = (name) => {
             $("#WLED" + name + "EditModal").modal("show");
         };
 
-        self.hideEditModal = function (name) {
+        self.hideEditModal = (name) => {
             $("#WLED" + name + "EditModal").modal("hide");
         };
 
@@ -190,8 +163,8 @@ $(function () {
         self.testConnectionError = ko.observable();
         self.testInProgress = ko.observable();
 
-        self.testConnection = function () {
-            let config = {
+        self.testConnection = () => {
+            const config = {
                 host: self.settingsViewModel.settings.plugins.wled.connection.host(),
                 password: self.settingsViewModel.settings.plugins.wled.connection.password(),
                 port: self.settingsViewModel.settings.plugins.wled.connection.port(),
@@ -207,7 +180,7 @@ $(function () {
             OctoPrint.simpleApiCommand("wled", "test", { config: config });
         };
 
-        self.fromTestResponse = function (response) {
+        self.fromTestResponse = (response) => {
             self.testInProgress(false);
             if (response.success) {
                 self.testConnectionOK(true);
@@ -220,11 +193,11 @@ $(function () {
             }
         };
 
-        self.toggle_lights = function () {
+        self.toggle_lights = () => {
             OctoPrint.simpleApiCommand(
                 "wled",
                 self.lights_on() ? "lights_off" : "lights_on"
-            ).done(function (response) {
+            ).done((response) => {
                 self.lights_on(response.lights_on);
             });
         };
@@ -238,7 +211,7 @@ $(function () {
         self.statusConnectionVersion = ko.observable();
         self.availableEffects = ko.observableArray();
 
-        self.fromGetResponse = function (response) {
+        self.fromGetResponse = (response) => {
             console.log(response);
             if (response.connected) {
                 self.statusConnected(true);
@@ -256,18 +229,17 @@ $(function () {
             self.requestInProgress(false);
         };
 
-        self.listEffects = function (effects) {
+        self.listEffects = (effects) => {
             // parses effects from WLED data to simple list
-            let effect_list = [];
+            const effect_list = [];
             _.forEach(effects, function (effect) {
                 effect_list.push(effect.name);
             });
-            console.log(effect_list);
             return effect_list;
         };
 
         // Viewmodel callbacks
-        self.onAfterBinding = self.onEventSettingsUpdated = function () {
+        self.onAfterBinding = self.onEventSettingsUpdated = () => {
             self.setEffectsFromSettings();
             self.requestInProgress(true);
             OctoPrint.simpleApiGet("wled").done(function (response) {
@@ -275,7 +247,7 @@ $(function () {
             });
         };
 
-        self.onDataUpdaterPluginMessage = function (plugin, data) {
+        self.onDataUpdaterPluginMessage = (plugin, data) => {
             if (plugin !== "wled") {
                 return;
             }
@@ -287,27 +259,17 @@ $(function () {
             }
         };
 
-        self.onSettingsBeforeSave = function () {
-            _.forEach(
-                [
-                    "idle",
-                    "disconnected",
-                    "started",
-                    "failed",
-                    "success",
-                    "paused",
-                ],
-                function (name) {
-                    self.settingsViewModel.settings.plugins.wled.effects[
-                        name
-                    ].settings(self.effects[name].segments());
-                    self.settingsViewModel.settings.plugins.wled.effects[
-                        name
-                    ].enabled(self.effects[name].enabled());
-                }
-            );
+        self.onSettingsBeforeSave = () => {
+            allEventNames.forEach((name) => {
+                self.settingsViewModel.settings.plugins.wled.effects[
+                    name
+                ].settings(self.effects[name].segments());
+                self.settingsViewModel.settings.plugins.wled.effects[
+                    name
+                ].enabled(self.effects[name].enabled());
+            });
         };
-    }
+    };
     OCTOPRINT_VIEWMODELS.push({
         construct: WLEDViewModel,
         dependencies: ["settingsViewModel"],
