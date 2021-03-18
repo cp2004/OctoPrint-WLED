@@ -8,7 +8,7 @@ const ko = window.ko;
 const OctoPrint = window.OctoPrint;
 
 $(function () {
-    const WLEDViewModel = (parameters) => {
+    function WLEDViewModel(parameters) {
         const self = this;
 
         const allEventNames = [
@@ -48,40 +48,38 @@ $(function () {
             allEventNames.forEach((name) => {
                 self.effects[name].enabled(settings.effects[name].enabled());
                 self.effects[name].segments([]);
-                settings.effects[name].forEach((segment) => {
+                settings.effects[name].settings().forEach((segment, index) => {
                     let observables = self.createEffectObservables();
                     observables.unique_id(
-                        settings.effects[name].settings()[segment].unique_id()
+                        settings.effects[name].settings()[index].unique_id()
                     );
                     observables.id(
-                        settings.effects[name].settings()[segment].id()
+                        settings.effects[name].settings()[index].id()
                     );
                     observables.brightness(
-                        settings.effects[name].settings()[segment].brightness()
+                        settings.effects[name].settings()[index].brightness()
                     );
                     observables.color_primary(
-                        settings.effects[name]
-                            .settings()
-                            [segment].color_primary()
+                        settings.effects[name].settings()[index].color_primary()
                     );
                     observables.color_secondary(
                         settings.effects[name]
                             .settings()
-                            [segment].color_secondary()
+                            [index].color_secondary()
                     );
                     observables.color_tertiary(
                         settings.effects[name]
                             .settings()
-                            [segment].color_tertiary()
+                            [index].color_tertiary()
                     );
                     observables.effect(
-                        settings.effects[name].settings()[segment].effect()
+                        settings.effects[name].settings()[index].effect()
                     );
                     observables.speed(
-                        settings.effects[name].settings()[segment].speed()
+                        settings.effects[name].settings()[index].speed()
                     );
                     observables.override_on(
-                        settings.effects[name].settings()[segment].override_on()
+                        settings.effects[name].settings()[index].override_on()
                     );
                     self.effects[name].segments.push(observables);
                 });
@@ -212,14 +210,12 @@ $(function () {
         self.availableEffects = ko.observableArray();
 
         self.fromGetResponse = (response) => {
-            console.log(response);
             if (response.connected) {
                 self.statusConnected(true);
                 self.statusConnectionHost(response.connection_info.host);
                 self.statusConnectionPort(response.connection_info.port);
                 self.statusConnectionVersion(response.connection_info.version);
                 self.availableEffects(self.listEffects(response.effects));
-                console.log(self.availableEffects());
             } else {
                 self.statusConnected(false);
                 self.statusConnectionError(
@@ -269,7 +265,7 @@ $(function () {
                 ].enabled(self.effects[name].enabled());
             });
         };
-    };
+    }
     OCTOPRINT_VIEWMODELS.push({
         construct: WLEDViewModel,
         dependencies: ["settingsViewModel"],
