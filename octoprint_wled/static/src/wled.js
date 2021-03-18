@@ -127,19 +127,6 @@ $(function () {
             self.showEditModal(name);
         };
 
-        self.saveEdit = (name, data) => {
-            const segment_unique_id = data.unique_id();
-            self.effects[name].segments().forEach((segment) => {
-                if (
-                    self.effects[name].segments()[segment].unique_id() ===
-                    segment_unique_id
-                ) {
-                    self.effects[name].segments()[segment] = data;
-                }
-            });
-            self.hideEditModal(name);
-        };
-
         self.deleteEffect = (name, data) => {
             self.effects[name].segments.remove(data);
         };
