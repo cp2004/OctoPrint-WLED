@@ -1,0 +1,76 @@
+{% import "settings/sub/macros.jinja2" as macros %}
+
+{% macro settingsInput(label, type, settings_path, identifier, setting_name, description=None) %}
+<div class="control-group">
+    <label class="control-label">{{ label }}</label>
+    <div class="controls">
+        {{ macros.input(type, settings_path + "." + identifier + ".editing()." + setting_name)}}
+        {% if description %}
+        <p class="help-block">
+            {{ description }}
+        </p>
+        {% endif %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro effectSelect(identifier) %}
+<div class="control-group">
+    <label class="control-label">Effect</label>
+    <div class="controls">
+        <select data-bind="value: effects.{{ identifier }}.editing().effect,
+                           options: availableEffects(),
+                           optionsCaption: 'Choose an effect...',
+                           enable: statusConnected">
+        </select>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro effectEditModal(identifier, name) %}
+<div id="WLED{{ identifier }}EditModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>
+            <i class="far fa-edit"></i> Editing {{ name }} effect, segment <span data-bind="text: effects.{{ identifier }}.editing().id"></span>
+        </h3>
+    </div>
+    <div class="modal-body form-horizontal">
+        {{ settingsInput("Segment ID", "number", "effects", identifier, "id", "Index of the segment, matching the one defined in the WLED settings") }}
+        {{ settingsInput("Brightness", "number", "effects", identifier, "brightness") }}
+        {{ settingsInput("Primary Color", "color", "effects", identifier, "color_primary") }}
+        {{ settingsInput("Secondary Color", "color", "effects", identifier, "color_secondary") }}
+        {{ settingsInput("Tertiary Color", "color", "effects", identifier, "color_tertiary") }}
+        {{ effectSelect(identifier) }}
+        {{ settingsInput("Intensity", "number", "effects", identifier, "intensity") }}
+        {{ settingsInput("Speed", "number", "effects", identifier, "speed") }}
+        {{ settingsInput("Overrides on/off", "checkbox", "effects", identifier, "override_on", "When checked, this effect will always turn all the WLED LEDs back on, if they are off") }}
+    </div>
+    <div class="modal-footer">
+        <!-- TODO reset to defaults button? -->
+        <button data-dismiss="modal" class="btn">Close</button>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro progressEditModal(identifier, name) %}
+    <div id="WLED{{ identifier }}ProgressEditModal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>
+            <i class="far fa-edit"></i> Editing {{ name }} effect, segment <span data-bind="text: progress.{{ identifier }}.editing().id"></span>
+        </h3>
+    </div>
+    <div class="modal-body form-horizontal">
+        {{ settingsInput("Segment ID", "number", "progress", identifier, "id", "Index of the segment, matching the one defined in the WLED settings") }}
+        {{ settingsInput("Brightness", "number", "progress", identifier, "brightness") }}
+        {{ settingsInput("Progress Color", "color", "progress", identifier, "color_primary") }}
+        {{ settingsInput("Base Color", "color", "progress", identifier, "color_secondary") }}
+        {{ settingsInput("Overrides on/off", "checkbox", "progress", identifier, "override_on", "When checked, this effect will always turn all the WLED LEDs back on, if they are off") }}
+    </div>
+    <div class="modal-footer">
+        <!-- TODO reset to defaults button? -->
+        <button data-dismiss="modal" class="btn">Close</button>
+    </div>
+</div>
+{% endmacro %}

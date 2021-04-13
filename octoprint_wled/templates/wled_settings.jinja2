@@ -32,6 +32,20 @@
         </button>
     </div>
 </div>
-{% include "effects/overview.jinja2" %}
+<div class="tabbable">
+    <ul class="nav nav-pills">
+        <li class="active"><a href="#wledPrinter" data-toggle="tab">Printing effects</a></li>
+        <li><a href="#wledProgress" data-toggle="tab">Progress effects</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="wledPrinter">
+            {% include "settings/overview.jinja2" %}
+        </div>
+        <div class="tab-pane" id="wledProgress">
+            {% include 'settings/progress.jinja2' %}
+        </div>
+    </div>
+</div>
+
 
 {% include "modals/connection.jinja2" %}

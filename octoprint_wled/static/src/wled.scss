@@ -4,6 +4,7 @@ $table-header-fs: large;
 $description-color: #5c5c5c;
 
 $gap-spacer: 5px;
+$col-widths: (10: 10%, 15: 15%, 35: 35%);
 
 #settings_plugin_wled {
   .font-bold {
@@ -44,4 +45,10 @@ $gap-spacer: 5px;
 .wled-nav-button {
   float: left;
   font-size: 20px;
+}
+
+@each $name, $width in $col-widths {
+  .colwidth-#{$name}{
+    width: #{$width};
+  }
 }

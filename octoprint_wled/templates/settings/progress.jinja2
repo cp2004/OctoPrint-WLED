@@ -1,0 +1,17 @@
+{% import "settings/sub/template.jinja2" as template %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th class="colwidth-10"></th>  {# These widths have been carefully fine tuned... Try not to break them :) #}
+        <th class="colwidth-35"></th>
+        <th class="colwidth-15"></th>
+        <th class="colwidth-15"></th>
+        <th class="colwidth-15"></th>
+        <th class="colwidth-10"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ template.progressOverview("print", "Printing Progress", "Show the progress of the print") }}
+    </tbody>
+</table>

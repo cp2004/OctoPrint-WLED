@@ -1,0 +1,38 @@
+{% import "settings/sub/macros.jinja2" as macros %}
+{% from "settings/sub/editmodal.jinja2" import effectEditModal, progressEditModal %}
+
+{% macro effectOverview(identifier, name, description=None) %}
+    <tr class="table-heading">
+    <td colspan="2">
+        <p>{{ name }}</p>
+    </td>
+    <td colspan="2">
+        <label class="inline">
+            Enabled: {{ macros.input("checkbox", "effects." + identifier + ".enabled") }}
+        </label>
+    </td>
+    <td colspan="2" class="text-align-center">
+        {{ macros.addEffectBtn(identifier) }}
+    </td>
+    </tr>
+    {{ macros.effectList(identifier) }}
+    {{ effectEditModal(identifier, name) }}
+{% endmacro %}
+
+{% macro progressOverview(identifier, name, description=None) %}
+    <tr class="table-heading">
+    <td colspan="2">
+        <p>{{ name }}</p>
+    </td>
+    <td colspan="2">
+        <label class="inline">
+            Enabled: {{ macros.input("checkbox", "progress." + identifier + ".enabled") }}
+        </label>
+    </td>
+    <td colspan="2" class="text-align-center">
+        {{ macros.addProgressBtn(identifier) }}
+    </td>
+    </tr>
+    {{ macros.effectList(identifier, "progress") }}
+    {{ progressEditModal(identifier, name) }}
+{% endmacro %}

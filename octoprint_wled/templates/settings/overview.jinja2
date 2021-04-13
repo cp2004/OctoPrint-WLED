@@ -1,22 +1,14 @@
-{% import "effects/sub/template.jinja2" as template %}
-
-{% macro overview_heading(name, width="4") %}
-    <div class="span{{ width }}">
-        <p>
-            {{ name }}
-        </p>
-    </div>
-{% endmacro %}
+{% import "settings/sub/template.jinja2" as template %}
 
 <table class="table">
     <thead>
     <tr>
-        <th width="10%"></th>
-        <th width="35%"></th>
-        <th width="15%"></th>
-        <th width="15%"></th>
-        <th width="15%"></th>
-        <th width="10%"></th>
+        <th class="colwidth-10"></th>  {# These widths have been carefully fine tuned... Try not to break them :) #}
+        <th class="colwidth-35"></th>
+        <th class="colwidth-15"></th>
+        <th class="colwidth-15"></th>
+        <th class="colwidth-15"></th>
+        <th class="colwidth-10"></th>
     </tr>
     </thead>
     <tbody>

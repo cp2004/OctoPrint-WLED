@@ -1,0 +1,71 @@
+{% macro addEffectBtn(name) %}
+    <button
+            class="btn btn-primary"
+            data-bind="click: function(){ addEffect('{{ name }}')}, enable: effects.{{ name }}.enabled"
+            title="Add {{ name|capitalize }} effect"
+    >
+        <i class="fas fa-plus fa-fw"></i>
+    </button>
+{% endmacro %}
+
+{% macro addProgressBtn(name) %}
+    <button
+            class="btn btn-primary"
+            data-bind="click: function(){ addProgressEffect('{{ name }}')}, enable: progress.{{ name }}.enabled"
+            title="Add {{ name|capitalize }} effect"
+    >
+        <i class="fas fa-plus fa-fw"></i>
+    </button>
+{% endmacro %}
+
+{% macro effectList(identifier, type="effects") %}
+    {# Progress uses two colours, effects 3 #}
+    {# TODO this seems like too much work #}
+    {% if type == "effects" %}
+        {% set colours = ["primary", "secondary", "tertiary"] %}
+        {% set edit = "editEffect" %}
+        {% set delete = "deleteEffect" %}
+    {% else %}
+        {% set colours = ["primary", "secondary"] %}
+        {% set edit = "editProgressEffect" %}
+        {% set delete = "deleteProgressEffect" %}
+    {% endif %}
+
+    <!-- ko foreach: {{ type }}.{{ identifier }}.segments() -->
+    <tr data-bind="visible: $root.{{ type }}.{{ identifier }}.enabled">
+    <td></td>
+    <td colspan="2">
+        <span class="font-bold">Segment: </span><span data-bind="text: id"></span>
+        {% if type == "effects" %}
+        <span class="font-bold gap-left">Effect: </span><span data-bind="text: effect"></span>
+        {% endif %}
+        <span class="font-bold gap-left">Colors:</span>
+        {% for color in colours %}
+        <svg class="gap-left text-align-center" width="15" height="15">
+            <rect rx="2" ry="2" width="15" height="15" style="stroke: black;stroke-width: 1px" data-bind="attr: {fill: color_{{ color }}}" ></rect>
+        </svg>
+        {% endfor %}
+    </td>
+    <td>
+        <button class="btn btn-danger" title="Delete {{ identifier }} effect" data-bind="click: function(){ $root.{{ delete }}('{{ identifier }}', $data)}">
+            <i class="fas fa-trash-alt fa-fw"></i> {# TODO fix #}
+        </button>
+    </td>
+    <td>
+        <button class="btn btn-primary" title="Edit {{ identifier }} effect" data-bind="click: function(){ $root.{{ edit }}('{{ identifier }}', $data) }">
+            <i class="far fa-edit fa-fw"></i>
+        </button>
+    </td>
+    <td></td>
+    </tr>
+    <!-- /ko -->
+{% endmacro %}
+
+{% macro input(type, binding, class=None) %}
+    {% if type == "checkbox" %}
+    {% set bind_type = "checked" %}
+    {% else %}
+    {% set bind_type = "value" %}
+    {% endif %}
+    <input type="{{ type }}" data-bind="{{ bind_type }}: {{ binding }}" {% if class %}class="{{ class }}"{% endif %}>
+{% endmacro %}

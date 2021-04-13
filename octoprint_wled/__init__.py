@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 
 import octoprint.plugin
 
-from octoprint_wled import _version, api, events
+from octoprint_wled import _version, api, events, progress
 from octoprint_wled.util import get_wled_params
 from octoprint_wled.wled import WLED
 
@@ -16,6 +16,7 @@ class WLEDPlugin(
     octoprint.plugin.TemplatePlugin,
     octoprint.plugin.SimpleApiPlugin,
     octoprint.plugin.EventHandlerPlugin,
+    octoprint.plugin.ProgressPlugin,
 ):
     wled: Optional[WLED]
     api: Optional[api.PluginAPI]
@@ -27,6 +28,7 @@ class WLEDPlugin(
         self.init_wled()
         self.api = api.PluginAPI(self)
         self.events = events.PluginEventHandler(self)
+        self.progress = progress.PluginProgressHandler(self)
 
     def init_wled(self) -> None:
         if self._settings.get(["connection", "host"]):
@@ -80,6 +82,10 @@ class WLEDPlugin(
     def on_event(self, event, payload):
         self.events.on_event(event, payload)
 
+    # Print Progress handling
+    def on_print_progress(self, storage, path, progress_value):
+        self.progress.on_print_progress(progress_value)
+
     # SettingsPlugin
     def get_settings_defaults(self) -> Dict[str, Any]:
         return {
@@ -115,8 +121,16 @@ class WLEDPlugin(
                 # }
                 # These should be created by the UI in this way, using the effect editor.
                 # It is *not* recommended that you configure these manually, it will probably go wrong.
-                # TO ADD ANYTHING TO THIS LIST a settings migration must be configured. See TPLINK smartplug plugin
+                # TO ADD ANYTHING TO THIS LIST a settings migration should be configured. See TP-Link Smartplug plugin
                 # for inspiration :)
+            },
+            "progress": {
+                "print": {"enabled": True, "settings": []}
+                # Progress effects have a similar layout to the above, HOWEVER without:
+                # * color_tertiary
+                # * effect
+                # * speed
+                # * intensity (controlled by progress)
             },
             "development": False,
         }

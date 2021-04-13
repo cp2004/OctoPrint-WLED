@@ -34,4 +34,16 @@
   font-size: 20px;
 }
 
+.colwidth-10 {
+  width: 10%;
+}
+
+.colwidth-15 {
+  width: 15%;
+}
+
+.colwidth-35 {
+  width: 35%;
+}
+
 /*# sourceMappingURL=wled.css.map */
