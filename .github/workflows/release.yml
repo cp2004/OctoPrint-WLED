@@ -28,9 +28,10 @@ jobs:
         run: |
           npm run release
       - name: 🔨 Commit changes to make versioneer happy
-        run: |
-          git add .
-          git commit -m Release
+        uses: EndBug/add-and-commit@v7
+        with:
+          push: false
+          branch: main
       - name: 🔨 Build a source zip
         run: |
           python setup.py sdist --formats=zip
