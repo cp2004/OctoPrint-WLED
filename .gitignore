@@ -6,6 +6,7 @@ build
 *.egg*
 .DS_Store
 *.zip
+dist
 
 .sass-cache
 node_modules
