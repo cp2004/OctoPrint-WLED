@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import json
 import logging
 from typing import Any, Dict, Mapping, Optional, Tuple, Union
@@ -22,8 +20,8 @@ from .models import Device
 class WLED:
     """Main class for handling connections with WLED"""
 
-    _device: Device | None = None
-    _supports_si_request: bool | None = None
+    _device: Optional[Device] = None
+    _supports_si_request: Optional[bool] = None
 
     def __init__(
         self,
@@ -68,9 +66,9 @@ class WLED:
         self,
         uri: str = "",
         method: str = "GET",
-        data: Any | None = None,
-        json_data: dict | None = None,
-        params: Mapping[str, str] | None = None,
+        data: Optional[Any] = None,
+        json_data: Optional[dict] = None,
+        params: Optional[Mapping[str, str]] = None,
     ) -> Any:
         """Handle a request to a WLED device"""
         scheme = "https" if self.tls else "http"
@@ -204,12 +202,12 @@ class WLED:
     def master(
         self,
         *,
-        brightness: int | None = None,
-        on: bool | None = None,
-        transition: int | None = None,
+        brightness: Optional[int] = None,
+        on: Optional[bool] = None,
+        transition: Optional[int] = None,
     ):
         """Change master state of a WLED Light device."""
-        state: dict[str, bool | int] = {}
+        state: Dict[str, Union[bool, int]] = {}
 
         if brightness is not None:
             state["bri"] = brightness
@@ -226,24 +224,28 @@ class WLED:
         self,
         segment_id: int,
         *,
-        brightness: int | None = None,
-        clones: int | None = None,
-        color_primary: None | (tuple[int, int, int, int] | tuple[int, int, int]) = None,
-        color_secondary: None
-        | (tuple[int, int, int, int] | tuple[int, int, int]) = None,
-        color_tertiary: None
-        | (tuple[int, int, int, int] | tuple[int, int, int]) = None,
-        effect: int | str | None = None,
-        intensity: int | None = None,
-        length: int | None = None,
-        on: bool | None = None,
-        palette: int | str | None = None,
-        reverse: bool | None = None,
-        selected: bool | None = None,
-        speed: int | None = None,
-        start: int | None = None,
-        stop: int | None = None,
-        transition: int | None = None,
+        brightness: Optional[int] = None,
+        clones: Optional[int] = None,
+        color_primary: Optional[
+            Union[Tuple[int, int, int, int], Tuple[int, int, int]]
+        ] = None,
+        color_secondary: Optional[
+            Union[Tuple[int, int, int, int], Tuple[int, int, int]]
+        ] = None,
+        color_tertiary: Optional[
+            Union[Tuple[int, int, int, int], Tuple[int, int, int]]
+        ] = None,
+        effect: Optional[Union[int, str]] = None,
+        intensity: Optional[int] = None,
+        length: Optional[int] = None,
+        on: Optional[bool] = None,
+        palette: Optional[Union[int, str]] = None,
+        reverse: Optional[bool] = None,
+        selected: Optional[bool] = None,
+        speed: Optional[int] = None,
+        start: Optional[int] = None,
+        stop: Optional[int] = None,
+        transition: Optional[int] = None,
     ) -> None:
         """Change state of a WLED Light segment."""
         if self._device is None:
@@ -344,7 +346,9 @@ class WLED:
         """Set a running playlist on a WLED device."""
         self._request("state", method="POST", json_data={"pl": playlist})
 
-    def sync(self, *, send: bool | None = None, receive: bool | None = None) -> None:
+    def sync(
+        self, *, send: Optional[bool] = None, receive: Optional[bool] = None
+    ) -> None:
         """Set the sync status of the WLED device."""
         sync = {"send": send, "recv": receive}
         sync = {k: v for k, v in sync.items() if v is not None}
@@ -353,10 +357,10 @@ class WLED:
     def nightlight(
         self,
         *,
-        duration: int | None = None,
-        fade: bool | None = None,
-        on: bool | None = None,
-        target_brightness: int | None = None,
+        duration: Optional[int] = None,
+        fade: Optional[bool] = None,
+        on: Optional[bool] = None,
+        target_brightness: Optional[int] = None,
     ) -> None:
         """Control the nightlight function of a WLED device."""
         nightlight = {
@@ -369,7 +373,7 @@ class WLED:
         # Filter out not set values
         nightlight = {k: v for k, v in nightlight.items() if v is not None}
 
-        state: dict[str, Any] = {"nl": nightlight}
+        state: Dict[str, Any] = {"nl": nightlight}
         if on:
             state["on"] = True
 
