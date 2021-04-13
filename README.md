@@ -42,13 +42,32 @@ In addition, I can also only guarantee compatibility with OctoPrint 1.5.0 and ne
 Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
 or manually using this URL:
 
-    https://github.com/cp2004/OctoPrint-WLED/archive/main.zip
+    https://github.com/cp2004/OctoPrint-WLED/releases/latest/download/release.zip
+
+### Warning about installing from source
+
+**If you install the plugin by downloading the source code from GitHub directly, it *will not work*.**
+
+This is because the frontend code is built as part of the release process. For details of building this see below.
 
 ## Configuration
 
 Configuration can be performed in the OctoPrint UI, under Settings > WLED Integration.
 
 Pictures coming soon 😉!
+
+## Contributing
+
+Contributions welcome :)
+
+To setup the node environment for frontend stuff:
+
+* Install: `npm install`
+* Watch JS development mode: `npm run dev`
+* Watch CSS development mode: `npm run dev-css`
+* Build both assets in release mode: `npm run release`
+
+These files *should not* be checked in, they are built on release automatically by a Github action.
 
 ## Credits
 
