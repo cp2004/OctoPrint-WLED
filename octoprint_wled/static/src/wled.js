@@ -4,6 +4,8 @@
  * Author: Charlie Powell
  * License: AGPLv3
  */
+import { nanoid } from 'nanoid'
+
 const ko = window.ko
 const OctoPrint = window.OctoPrint
 const $ = window.$
@@ -93,20 +95,10 @@ $(function () {
     })()
 
     self.addEffect = (name) => {
-      const uid = self.new_uid(name)
+      const uid = nanoid(8) // Probability of collisions @ 1/hr is 271 years
       const newEffect = self.createEffectObservables(uid)
       self.effects[name].segments.push(newEffect)
       self.editEffect(name, newEffect)
-    }
-
-    self.new_uid = (name) => {
-      let highestUid = 0
-      self.effects[name].segments().forEach((segment) => {
-        if (segment.unique_id() > highestUid) {
-          highestUid = segment.unique_id()
-        }
-      })
-      return highestUid + 1
     }
 
     self.editEffect = (name, data) => {
