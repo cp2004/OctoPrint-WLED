@@ -312,6 +312,7 @@ $(function () {
   }
   OCTOPRINT_VIEWMODELS.push({
     construct: WLEDViewModel,
+    name: 'WLEDViewModel', // Required because webpack in production inlines it, and it has no name
     dependencies: ['settingsViewModel'],
     elements: ['#settings_plugin_wled', '#navbar_plugin_wled']
   })
