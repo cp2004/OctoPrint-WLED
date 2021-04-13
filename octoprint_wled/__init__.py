@@ -159,7 +159,7 @@ class WLEDPlugin(
     def get_update_information(self) -> dict:
         return {
             "wled": {
-                "displayName": "WLED Integration",
+                "displayName": "WLED Connection",
                 "displayVersion": self._plugin_version,
                 # version check: github repository
                 "type": "github_release",
@@ -184,9 +184,9 @@ class WLEDPlugin(
         }
 
 
-__plugin_name__ = "WLED Integration"
+__plugin_name__ = "WLED Connection"
 __plugin_version__ = __version__
-__plugin_pythoncompat__ = ">=3.6,<4"  # python 3.6+
+__plugin_pythoncompat__ = ">=3.6,<4"
 
 
 def __plugin_load__():

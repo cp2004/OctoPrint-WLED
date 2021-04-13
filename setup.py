@@ -1,3 +1,15 @@
+from setuptools import setup
+
+try:
+    import octoprint_setuptools
+except:
+    print(
+        "Could not import OctoPrint's setuptools, are you sure you are running that under "
+        "the same python installation that OctoPrint is installed under?"
+    )
+    import sys
+
+    sys.exit(-1)
 import versioneer
 
 # The plugin's identifier, has to be unique
@@ -38,9 +50,9 @@ plugin_requires = [
     "requests>=2.23.0,<3",
 ]
 
-### --------------------------------------------------------------------------------------------------------------------
-### More advanced options that you usually shouldn't have to touch follow after this point
-### --------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------------
+# More advanced options that you usually shouldn't have to touch follow after this point
+# --------------------------------------------------------------------------------------------------------------------
 
 # Additional package data to install for this plugin. The subfolders "templates", "static" and "translations" will
 # already be installed automatically if they exist. Note that if you add something here you'll also need to update
@@ -54,30 +66,10 @@ plugin_additional_packages = []
 # Any python packages within <plugin_package>.* you do NOT want to install with your plugin
 plugin_ignored_packages = []
 
-# Additional parameters for the call to setuptools.setup. If your plugin wants to register additional entry points,
-# define dependency links or other things like that, this is the place to go. Will be merged recursively with the
-# default setup parameters as provided by octoprint_setuptools.create_plugin_setup_parameters using
-# octoprint.util.dict_merge.
-#
-# Example:
-#     plugin_requires = ["someDependency==dev"]
-#     additional_setup_parameters = {"dependency_links": ["https://github.com/someUser/someRepo/archive/master.zip#egg=someDependency-dev"]}
+# Additional setup parameters, merged with the rest
 additional_setup_parameters = {"python_requires": ">3.6,<4"}
 
 ########################################################################################################################
-
-from setuptools import setup
-
-try:
-    import octoprint_setuptools
-except:
-    print(
-        "Could not import OctoPrint's setuptools, are you sure you are running that under "
-        "the same python installation that OctoPrint is installed under?"
-    )
-    import sys
-
-    sys.exit(-1)
 
 setup_parameters = octoprint_setuptools.create_plugin_setup_parameters(
     identifier=plugin_identifier,

@@ -3,8 +3,8 @@
 ### This plugin is still under development, while it works it is incomplete.
 ### If you want to see what is coming soon, have a look at the [the TODO issue](https://github.com/cp2004/OctoPrint-WLED/issues/2)
 
-[WLED](https://github.com/Aircoookie/WLED) is an awesome project, [OctoPrint](https://octoprint.org)
-is yet another awesome project. What could be better than an OctoPrint plugin for connecting the two?
+[WLED](https://github.com/Aircoookie/WLED) is an awesome project, as is [OctoPrint](https://octoprint.org).
+What could be better than an OctoPrint plugin for connecting the two?
 
 This plugin allows you to configure a WLED device to connect to OctoPrint, and the LEDs can react to different events
 to display the status of your prints with ease!
@@ -21,21 +21,21 @@ aims to provide a similar experience of high configurability with ease of use.
   - Print success
   - Print failed
   - Print paused
+- Displaying printing progress
 - Highly configurable settings
 - Easy to use UI
 - ... and more!
 
-**This project is under early development, please be patient as bugs are fixed and features are added!**
+**This project is still under development, please be patient as bugs are fixed and features are added!**
 
 ## Setup
 
 ### Compatibility
 
-This plugin will only install on Python 3 systems. For a guide to upgrading (it's easy!), please see the
+This plugin will only install on Python 3 systems. For a guide to upgrading (it's easy!), please see my
 [blog post (octoprint.org)](https://octoprint.org/blog/2020/09/10/upgrade-to-py3/).
 
-In addition, I can also only guarantee compatibility with OctoPrint 1.5.0 and newer. The icons definitely won't work in
-older versions. Please update!
+In addition, I can also only guarantee compatibility with OctoPrint 1.5.0 and newer.
 
 ### Install
 
