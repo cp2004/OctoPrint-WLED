@@ -48,7 +48,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build
-      - test-install
     steps:
       - name: ⬇ Download build result
         uses: actions/download-artifact@v1
