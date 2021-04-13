@@ -9,6 +9,7 @@
 
 # These branches should only use tags, use for your release branches
 master
+main
 pre-release
 rc/.*
 
