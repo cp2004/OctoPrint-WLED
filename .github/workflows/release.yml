@@ -27,6 +27,10 @@ jobs:
       - name: 🔨 Build frontend code in release mode
         run: |
           npm run release
+      - name: 🔨 Commit changes to make versioneer happy
+        run: |
+          git add .
+          git commit -m Release
       - name: 🔨 Build a source zip
         run: |
           python setup.py sdist --formats=zip
@@ -39,30 +43,6 @@ jobs:
           name: dist
           path: dist
 
-  test-install:
-    name: 🧪 Installation tests
-    needs: build
-    strategy:
-      matrix:
-        python: ["3.7", "3.8"]
-    runs-on: ubuntu-latest
-    steps:
-      - name: 🏗 Set up Python ${{ matrix.python }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python }}
-      - name: ⬇ Download build result
-        uses: actions/download-artifact@v1
-        with:
-          name: dist
-          path: dist
-      - name: 🏗 Install dependencies
-        run: |
-          python -m pip install --upgrade wheel setuptools pip
-          python -m pip install octoprint
-      - name: 🧪 Test install of package
-        run: |
-          python -m pip install dist/sdist.zip
   upload-asset:
     name: 📦 Upload asset to release
     runs-on: ubuntu-latest
