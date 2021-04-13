@@ -44,7 +44,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        python: ["2.7", "3.7", "3.8"]
+        python: ["3.7", "3.8"]
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Set up Python ${{ matrix.python }}
