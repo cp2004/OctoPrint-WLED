@@ -22,6 +22,7 @@ jobs:
       - name: 🏗 Install build dependencies
         run: |
           python -m pip install wheel octoprint --user
+          npm install -g npm@7
           npm install
       - name: 🔨 Build frontend code in release mode
         run: |
