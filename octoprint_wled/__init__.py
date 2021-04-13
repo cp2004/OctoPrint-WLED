@@ -179,7 +179,7 @@ class WLEDPlugin(
                     }
                 ],
                 # update method: pip
-                "pip": "https://github.com/cp2004/OctoPrint-WLED/archive/{target_version}.zip",
+                "pip": "https://github.com/cp2004/OctoPrint-WLED/releases/{target_version}/download/release.zip",
             }
         }
 
