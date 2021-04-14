@@ -12,7 +12,6 @@ const $ = window.$
 const OCTOPRINT_VIEWMODELS = window.OCTOPRINT_VIEWMODELS
 
 $(function () {
-  console.log('hi')
   function WLEDViewModel (parameters) {
     const self = this
 
@@ -33,31 +32,27 @@ $(function () {
 
     self.lights_on = ko.observable(true)
 
-    self.createEffectObservables = (u_id = 0) => {
-      const effect = {}
-      effect.unique_id = ko.observable(u_id)
-      effect.id = ko.observable(0)
-      effect.brightness = ko.observable(200)
-      effect.color_primary = ko.observable('#ffffff')
-      effect.color_secondary = ko.observable('#000000')
-      effect.color_tertiary = ko.observable('#000000')
-      effect.effect = ko.observable('Solid')
-      effect.intensity = ko.observable(127)
-      effect.speed = ko.observable(127)
-      effect.override_on = ko.observable(false)
-      return effect
-    }
+    self.createEffectObservables = (u_id = 0) => ({
+      unique_id: ko.observable(u_id),
+      id: ko.observable(0),
+      brightness: ko.observable(200),
+      color_primary: ko.observable('#ffffff'),
+      color_secondary: ko.observable('#000000'),
+      color_tertiary: ko.observable('#000000'),
+      effect: ko.observable('Solid'),
+      intensity: ko.observable(127),
+      speed: ko.observable(127),
+      override_on: ko.observable(false)
+    })
 
-    self.createProgressObservables = (uid = 0) => {
-      return {
-        unique_id: ko.observable(uid),
-        id: ko.observable(0),
-        brightness: ko.observable(200),
-        color_primary: ko.observable('#ffffff'),
-        color_secondary: ko.observable('#000000'),
-        override_on: ko.observable(false)
-      }
-    }
+    self.createProgressObservables = (uid = 0) => ({
+      unique_id: ko.observable(uid),
+      id: ko.observable(0),
+      brightness: ko.observable(200),
+      color_primary: ko.observable('#ffffff'),
+      color_secondary: ko.observable('#000000'),
+      override_on: ko.observable(false)
+    })
 
     self.setEditingObservables = (effect, data) => {
       effect.editing(data)
@@ -121,13 +116,11 @@ $(function () {
     self.effects = (() => {
       const effects = {}
       allEventNames.forEach((eventName) => {
-        effects[eventName] = (function () {
-          const eventEffect = {}
-          eventEffect.enabled = ko.observable()
-          eventEffect.segments = ko.observableArray([])
-          eventEffect.editing = ko.observable(self.createEffectObservables())
-          return eventEffect
-        })()
+        effects[eventName] = {
+          enabled: ko.observable(),
+          segments: ko.observableArray([]),
+          editing: ko.observable(self.createEffectObservables())
+        }
       })
       return effects
     })()
@@ -200,20 +193,13 @@ $(function () {
     self.testInProgress = ko.observable()
 
     self.testConnection = () => {
-      const config = {
-        host: self.settingsViewModel.settings.plugins.wled.connection.host(),
-        password: self.settingsViewModel.settings.plugins.wled.connection.password(),
-        port: self.settingsViewModel.settings.plugins.wled.connection.port(),
-        request_timeout: self.settingsViewModel.settings.plugins.wled.connection.request_timeout(),
-        tls: self.settingsViewModel.settings.plugins.wled.connection.tls(),
-        username: self.settingsViewModel.settings.plugins.wled.connection.username(),
-        auth: self.settingsViewModel.settings.plugins.wled.connection.auth()
-      }
       self.testInProgress(true)
       self.testConnectionOK(true)
       self.testConnectionStatus('')
       self.testConnectionError('')
-      OctoPrint.simpleApiCommand('wled', 'test', { config: config })
+      OctoPrint.simpleApiCommand('wled', 'test', {
+        config: ko.toJS(self.settingsViewModel.settings.plugins.wled.connection)
+      })
     }
 
     self.fromTestResponse = (response) => {
@@ -261,14 +247,7 @@ $(function () {
       self.requestInProgress(false)
     }
 
-    self.listEffects = (effects) => {
-      // parses effects from WLED data to simple list
-      const effectList = []
-      effects.forEach((effect) => {
-        effectList.push(effect.name)
-      })
-      return effectList
-    }
+    self.listEffects = (effects) => effects.map(effect => effect.name)
 
     // Viewmodel callbacks
     self.onAfterBinding = self.onEventSettingsUpdated = () => {
