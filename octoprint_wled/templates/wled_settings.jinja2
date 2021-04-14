@@ -32,10 +32,12 @@
         </button>
     </div>
 </div>
+<hr>
 <div class="tabbable">
     <ul class="nav nav-pills">
         <li class="active"><a href="#wledPrinter" data-toggle="tab">Printing effects</a></li>
         <li><a href="#wledProgress" data-toggle="tab">Progress effects</a></li>
+        <li><a href="#wledAbout" data-toggle="tab">About</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="wledPrinter">
@@ -43,6 +45,9 @@
         </div>
         <div class="tab-pane" id="wledProgress">
             {% include 'settings/progress.jinja2' %}
+        </div>
+        <div class="tab-pane" id="wledAbout">
+            {% include "settings/about.jinja2" %}
         </div>
     </div>
 </div>

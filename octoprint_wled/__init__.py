@@ -21,6 +21,7 @@ class WLEDPlugin(
     wled: Optional[WLED]
     api: Optional[api.PluginAPI]
     events: Optional[events.PluginEventHandler]
+    progress: Optional[progress.PluginProgressHandler]
     lights_on: bool = True
 
     def initialize(self) -> None:
@@ -153,6 +154,12 @@ class WLEDPlugin(
         return {
             "js": js,
             "css": ["dist/wled.css"],
+        }
+
+    # TemplatePlugin
+    def get_template_vars(self):
+        return {
+            "version": self._plugin_version,
         }
 
     # Software Update hook
