@@ -1,8 +1,5 @@
 # OctoPrint WLED Integration
 
-### This plugin is still under development, while it works it is incomplete.
-### If you want to see what is coming soon, have a look at the [the TODO issue](https://github.com/cp2004/OctoPrint-WLED/issues/2)
-
 [WLED](https://github.com/Aircoookie/WLED) is an awesome project, as is [OctoPrint](https://octoprint.org).
 What could be better than an OctoPrint plugin for connecting the two?
 
@@ -54,11 +51,12 @@ This is because the frontend code is built as part of the release process. For d
 
 Configuration can be performed in the OctoPrint UI, under Settings > WLED Integration.
 
-Pictures coming soon 😉!
 
 ## Contributing
 
-Contributions welcome :)
+Contributions are welcome, full contributing guidelines are coming soon.
+
+If you are feeling like contributing a new feature, feel free to open an issue so we can discuss!
 
 To setup the node environment for frontend stuff:
 
@@ -67,12 +65,14 @@ To setup the node environment for frontend stuff:
 * Watch CSS development mode: `npm run dev-css`
 * Build both assets in release mode: `npm run release`
 
-These files *should not* be checked in, they are built on release automatically by a Github action.
+These files *should not* be checked in, they are built on release automatically by a GitHub action.
 
 ## Credits
 
-This plugin wouldn't be possible without the great work of [@frenck](https://github.com/frenck)'s
+This plugin wouldn't be possible without the great work from [@frenck](https://github.com/frenck) with the
 [python-wled](https://github.com/frenck/python-wled) Python module that I was able to use. It has been slightly modified
 to work better within an OctoPrint plugin, but it is a great module to work with. Thank you!
 
-[View the python-wled license](https://github.com/cp2004/OctoPrint-WLED/blob/main/octoprint_wled/wled/LICENSE.md)
+*[View the OctoPrint-WLED license](https://github.com/cp2004/OctoPrint-WLED/blob/main/LICENSE.md)*
+
+*[View the python-wled license](https://github.com/cp2004/OctoPrint-WLED/blob/main/octoprint_wled/wled/LICENSE.md)*

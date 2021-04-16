@@ -7,16 +7,11 @@ description: WLED is an awesome project, as is OctoPrint. What could be better t
 author: Charlie Powell
 license: AGPLv3
 
-# TODO
-date: 2021-04-14
+date: 2021-04-16
 
 homepage: https://github.com/cp2004/OctoPrint-WLED
 source: https://github.com/cp2004/OctoPrint-WLED
 archive: https://github.com/cp2004/OctoPrint-WLED/releases/latest/download/release.zip
-
-# Set this to true if your plugin uses the dependency_links setup parameter to include
-# library versions not yet published on PyPi. SHOULD ONLY BE USED IF THERE IS NO OTHER OPTION!
-#follow_dependency_links: false
 
 tags:
   - wled
@@ -26,19 +21,15 @@ tags:
   - rgb led
   - status
 
-# TODO
 screenshots:
-  - url: url of a screenshot, /assets/img/...
-    alt: alt-text of a screenshot
-    caption: caption of a screenshot
-  - url: url of another screenshot, /assets/img/...
-    alt: alt-text of another screenshot
-    caption: caption of another screenshot
-  - ...
+  - url: /assets/img/plugins/wled/plugin.png
+    alt: WLED + OctoPrint
+    caption: WLED meets OctoPrint!
+  - url: /assets/img/plugins/wled/settings.png
+    alt: WLED Settings
+    caption: Sample of the WLED Settings
 
-# TODO
-featuredimage: url of a featured image for your plugin, /assets/img/...
-
+featuredimage: /assets/img/plugins/wled/plugin.png
 
 compatibility:
   octoprint:
@@ -62,11 +53,13 @@ aims to provide a similar experience of high configurability with ease of use.
   - Print success
   - Print failed
   - Print paused
-- Highly configurable settings
-- Easy to use UI
+- Tracking print progress
+- Highly configurable settings & and easy to use UI
 - ... and more!
 
 **This project is under early development, please be patient as bugs are fixed and features are added!**
+
+**For the most up to date information, be sure to [check out the GitHub Repository](https://github.com/cp2004/OctoPrint-WLED)**
 
 ## Setup
 
@@ -89,7 +82,7 @@ or manually using this URL:
 
 Configuration can be performed in the OctoPrint UI, under Settings > WLED Integration.
 
-Pictures coming soon 😉!
+More documentation and explanation is on the way!
 
 ## Credits
 
