@@ -54,7 +54,7 @@ Configuration can be performed in the OctoPrint UI, under Settings > WLED Integr
 ## Support My Efforts
 
 I created this plugin in my spare time, for the community. If you have enjoyed using it,
-please consider [supporting it's development](https://github.com/sponsors/cp2004) through GitHub sponsors.
+please consider [supporting its development](https://github.com/sponsors/cp2004) through GitHub sponsors.
 Monthly, one-time or a custom amount, you choose!
 
 ## Contributing
