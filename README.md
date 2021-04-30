@@ -1,5 +1,14 @@
 # OctoPrint WLED Integration
 
+[![GitHub issues](https://img.shields.io/github/issues/cp2004/OctoPrint-WLED?style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/issues)
+[![GitHub branch checks state](https://img.shields.io/github/checks-status/cp2004/OctoPrint-WLED/main?style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/actions)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/cp2004/OctoPrint-WLED?label=latest%20release&sort=semver&style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/releases)
+[![GitHub release installs (latest by date)](https://img.shields.io/github/downloads/cp2004/OctoPrint-WLED/latest/total?label=New%20installs%40latest&style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/cp2004/OctoPrint-WLED?style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/releases)
+[![GitHub Repo stars](https://img.shields.io/github/stars/cp2004/OctoPrint-WLED?style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/stargazers)
+[![GitHub](https://img.shields.io/github/license/cp2004/OctoPrint-WLED?style=flat-square)](https://github.com/cp2004/OctoPrint-WLED/blob/main/LICENSE.md)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/cp2004?style=flat-square)](https://github.com/sponsors/cp2004)
+
 [WLED](https://github.com/Aircoookie/WLED) is an awesome project, as is [OctoPrint](https://octoprint.org).
 What could be better than an OctoPrint plugin for connecting the two?
 
