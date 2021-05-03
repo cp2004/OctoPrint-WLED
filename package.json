@@ -35,7 +35,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "node-sass": "^5.0.0",
     "sass": "^1.32.12",
-    "webpack": "^5.35.1",
+    "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },
   "browserslist": {
