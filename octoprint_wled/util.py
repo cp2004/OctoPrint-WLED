@@ -51,3 +51,14 @@ def hex_to_rgb(hex_colour: str) -> Tuple[int, int, int]:
         return 0, 0, 0
     h = hex_colour[1:7]
     return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+
+
+def calculate_heating_progress(current: float, target: float) -> int:
+    """
+    Calculate the progress percentage
+    Ensures that the value is between 0 and 100, and handles zero division.
+    """
+    try:
+        return int(min(max(current / target, 0), 1) * 100)
+    except ZeroDivisionError:
+        return 0

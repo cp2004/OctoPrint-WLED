@@ -37,6 +37,8 @@ class PluginEventHandler:
             start_thread(
                 self.update_effect, kwargs={"effect": self.event_to_effect[event]}
             )
+        if event == Events.PRINT_DONE:
+            self.plugin.cooling = True
 
     def update_effect(self, effect) -> None:
         """

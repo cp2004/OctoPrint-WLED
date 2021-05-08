@@ -1,9 +1,10 @@
-from typing import Any, Dict, List, Optional, Union
+import logging
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import octoprint.plugin
 
 from octoprint_wled import _version, api, constants, events, progress
-from octoprint_wled.util import get_wled_params
+from octoprint_wled.util import calculate_heating_progress, get_wled_params
 from octoprint_wled.wled import WLED
 
 __version__ = _version.get_versions()["version"]
@@ -19,12 +20,14 @@ class WLEDPlugin(
     octoprint.plugin.ProgressPlugin,
 ):
     def __init__(self):
-        super()
-        self.wled: Optional[WLED]
-        self.api: Optional[api.PluginAPI]
-        self.events: Optional[events.PluginEventHandler]
-        self.progress: Optional[progress.PluginProgressHandler]
+        super().__init__()
+        self.wled: Optional[WLED] = None
+        self.api: Optional[api.PluginAPI] = None
+        self.events: Optional[events.PluginEventHandler] = None
+        self.progress: Optional[progress.PluginProgressHandler] = None
         self.lights_on: bool = True
+
+        self._logger: logging.Logger
 
         # Heating & cooling detection flags
         self.heating: bool = False
@@ -99,7 +102,11 @@ class WLEDPlugin(
                 # TODO go back to previous effect
 
     def temperatures_received(
-        self, comm, parsed_temps: Dict[str, Union[float, None]], *args, **kwargs
+        self,
+        comm,
+        parsed_temps: Dict[str, Tuple[float, Union[float, None]]],
+        *args,
+        **kwargs,
     ):
         tool_key = self._settings.get(["progress", "heating", "tool_key"])
 
@@ -134,15 +141,18 @@ class WLEDPlugin(
             else:
                 heater = "B"
             try:
-                current_temp = parsed_temps[heater][0]
+                current = parsed_temps[heater][0]
             except KeyError:
                 self._logger.warning(
                     f"{heater} not found, can't show progress - check config"
                 )
                 self.heating = False
-                self.process_previous_event()
+                # self.process_previous_event()
                 return parsed_temps
 
+            self._logger.info(
+                f"Heating, progress {calculate_heating_progress(current, self.target_temperature[self.current_heater_heating])}%"
+            )
             # self.update_effect(
             #     "progress_heatup {}".format(
             #         self.calculate_heatup_progress(
@@ -165,19 +175,21 @@ class WLEDPlugin(
 
             if current < self._settings.get_int(["progress", "cooling", "threshold"]):
                 self.cooling = False
-                self.process_previous_event()
+                # self.process_previous_event()
                 return parsed_temps
 
-            self.progress.on_cooling_progress()
-
-            self.update_effect(
-                "progress_cooling {}".format(
-                    self.calculate_heatup_progress(
-                        current,
-                        self.target_temperature[bed_or_tool],
-                    )
-                )
+            self._logger.info(
+                f"Cooling, progress {calculate_heating_progress(current, self.target_temperature[bed_or_tool])}%"
             )
+
+            # self.update_effect(
+            #     "progress_cooling {}".format(
+            #         self.calculate_heatup_progress(
+            #             current,
+            #             self.target_temperature[bed_or_tool],
+            #         )
+            #     )
+            # )
 
         # MUST always return parsed_temps
         return parsed_temps
@@ -256,7 +268,7 @@ class WLEDPlugin(
                 "cooling": {
                     "enabled": True,
                     "settings": [],
-                    "bed_or_tool": True,
+                    "bed_or_tool": "tool",
                     "tool_key": "0",
                     "threshold": "40",
                 }
@@ -264,7 +276,7 @@ class WLEDPlugin(
                 # * color_tertiary
                 # * effect
                 # * speed
-                # * intensity (controlled by progress)
+                # * intensity (controlled by progress value)
             },
             "development": False,
         }
