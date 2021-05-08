@@ -64,17 +64,21 @@ class PluginProgressHandler:
 
             try:
                 # Try and set the effect to WLED
-                self.plugin.wled.segment(
-                    segment_id=int(segment["id"]),
-                    brightness=int(segment["brightness"]),
-                    color_primary=hex_to_rgb(segment["color_primary"]),
-                    color_secondary=hex_to_rgb(segment["color_secondary"]),
-                    # color_tertiary=hex_to_rgb(segment["color_tertiary"]),
-                    effect="Percent",
-                    intensity=int(value),
-                    on=lights_on,
+                self.plugin.runner.wled_call(
+                    self.plugin.wled.segment,
+                    kwargs={
+                        "segment_id": int(segment["id"]),
+                        "brightness": int(segment["brightness"]),
+                        "color_primary": hex_to_rgb(segment["color_primary"]),
+                        "color_secondary": hex_to_rgb(segment["color_secondary"]),
+                        "effect": "Percent",
+                        "intensity": int(value),
+                        "on": lights_on,
+                    },
                 )
                 response = {}
+                # TODO remove all this error handling, move to runner
+                # It will never fire under current handling
             except (
                 WLEDEmptyResponseError,
                 WLEDConnectionError,

@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 import octoprint.plugin
 
-from octoprint_wled import _version, api, constants, events, progress
+from octoprint_wled import _version, api, constants, events, progress, runner
 from octoprint_wled.util import calculate_heating_progress, get_wled_params
 from octoprint_wled.wled import WLED
 
@@ -24,6 +24,7 @@ class WLEDPlugin(
         self.wled: Optional[WLED] = None
         self.api: Optional[api.PluginAPI] = None
         self.events: Optional[events.PluginEventHandler] = None
+        self.runner: Optional[runner.WLEDRunner] = None
         self.progress: Optional[progress.PluginProgressHandler] = None
         self.lights_on: bool = True
 
@@ -44,6 +45,7 @@ class WLEDPlugin(
         self.init_wled()
         self.api = api.PluginAPI(self)
         self.events = events.PluginEventHandler(self)
+        self.runner = runner.WLEDRunner(self)
         self.progress = progress.PluginProgressHandler(self)
 
     def init_wled(self) -> None:
@@ -56,13 +58,15 @@ class WLEDPlugin(
     def activate_lights(self) -> None:
         self._logger.info("Turning WLED lights on")
         try:
-            self.wled.master(on=True)
+            self.runner.wled_call(self.wled.master, kwargs={"on": True})
         except Exception as e:
             self._logger.error("Error while turning WLED lights on")
             self._logger.exception(repr(e))
 
-        # If we got this far there was no error
         # Notify the UI
+        # WARNING: this still occurs even if there was an error above
+        # TODO is this the best option? Probably not. But it prevents crucial blocking
+        # in the gcode & temperatures received hooks. Which is bad.
         self.send_message("lights", {"on": True})
         self.lights_on = True
 
@@ -150,17 +154,11 @@ class WLEDPlugin(
                 # self.process_previous_event()
                 return parsed_temps
 
-            self._logger.info(
-                f"Heating, progress {calculate_heating_progress(current, self.target_temperature[self.current_heater_heating])}%"
+            value = calculate_heating_progress(
+                current, self.target_temperature[self.current_heater_heating]
             )
-            # self.update_effect(
-            #     "progress_heatup {}".format(
-            #         self.calculate_heatup_progress(
-            #             current_temp,
-            #             self.target_temperature[self.current_heater_heating],
-            #         )
-            #     )
-            # )
+            self._logger.debug(f"Heating, progress {value}%")
+            self.progress.on_heating_progress(value)
 
         elif self.cooling:
             bed_or_tool = self._settings.get(["progress", "cooling", "bed_or_tool"])
@@ -178,18 +176,12 @@ class WLEDPlugin(
                 # self.process_previous_event()
                 return parsed_temps
 
-            self._logger.info(
-                f"Cooling, progress {calculate_heating_progress(current, self.target_temperature[bed_or_tool])}%"
+            value = calculate_heating_progress(
+                current, self.target_temperature[bed_or_tool]
             )
 
-            # self.update_effect(
-            #     "progress_cooling {}".format(
-            #         self.calculate_heatup_progress(
-            #             current,
-            #             self.target_temperature[bed_or_tool],
-            #         )
-            #     )
-            # )
+            self._logger.debug(f"Cooling, progress {value}%")
+            self.progress.on_cooling_progress(value)
 
         # MUST always return parsed_temps
         return parsed_temps
