@@ -20,34 +20,39 @@ class PluginProgressHandler:
 
         self.last_print_progress: Optional[int] = None
 
-    def on_print_progress(self, value):
+    def on_print_progress(self, value: int):
+        self.set_progress(value, "print")
+
+    def on_heating_progress(self, value: int):
+        self.set_progress(value, "heating")
+
+    def on_cooling_progress(self, value: int):
+        self.set_progress(value, "heating")
+
+    def set_progress(self, value: int, progress_type: str):
         # Check WLED is setup & ready
         if not self.plugin.wled:
             return
 
-        # Grab the settings
+        # Grab settings
         # noinspection PyProtectedMember
-        progress_enabled = self.plugin._settings.get_boolean(
-            ["progress", "print", "enabled"]
-        )
+        enabled = self.plugin._settings.get_boolean(["progress", progress_type, "enabled"])
         # noinspection PyProtectedMember
-        effect_settings = self.plugin._settings.get(["progress", "print", "settings"])
+        effect_settings = self.plugin._settings.get(["progress", progress_type, "settings"])
         lights_on = copy.copy(self.plugin.lights_on)
         turn_lights_on = False
 
-        if not progress_enabled:
-            self._logger.debug("Progress not enabled, not running")
-            return
+        if not enabled:
+            self._logger.debug(f"Progress {progress_type} not enabled, not running")
 
         if not effect_settings:
-            self._logger.warning("Progress enabled but no settings found, chck config")
-            return
+            self._logger.warning(f"Progress {progress_type} enabled but no settings found, check config")
 
         for segment in effect_settings:
             if segment["override_on"]:
                 turn_lights_on = True
 
-            self._logger.debug(f"Setting print progress to segment {segment['id']}")
+            self._logger.debug(f"Setting {progress_type} progress to segment {segment['id']}")
 
             try:
                 # Try and set the effect to WLED
@@ -56,10 +61,9 @@ class PluginProgressHandler:
                     brightness=int(segment["brightness"]),
                     color_primary=hex_to_rgb(segment["color_primary"]),
                     color_secondary=hex_to_rgb(segment["color_secondary"]),
-                    # color_tertiary=hex_to_rgb(segment["color_tertiary"]),  # Irrelevant to percent effect
+                    # color_tertiary=hex_to_rgb(segment["color_tertiary"]),
                     effect="Percent",
                     intensity=int(value),
-                    # speed=int(segment["speed"])   # Don't mess with speed here, pointless
                     on=lights_on,
                 )
                 response = {}
@@ -69,7 +73,7 @@ class PluginProgressHandler:
                 WLEDConnectionTimeoutError,
             ) as exception:
                 # Known exception, reported to frontend on the websocket
-                error = f"Error setting {segment['effect']} to segment {segment['id']}"
+                error = f"Error setting {progress_type} progress to segment {segment['id']}"
                 self._logger.error(error),
                 self._logger.error(repr(exception))
                 response = {
@@ -80,7 +84,7 @@ class PluginProgressHandler:
             except Exception as exception:
                 # Something else wrong... Needs handling to report to user.
                 error = (
-                    f"Unexpected error setting {segment['effect']} to segment {segment['id']}, "
+                    f"Error setting {progress_type} progress to segment {segment['id']}, "
                     f"consult the log for details."
                 )
                 self._logger.error(error)

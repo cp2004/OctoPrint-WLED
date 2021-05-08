@@ -1,8 +1,8 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import octoprint.plugin
 
-from octoprint_wled import _version, api, events, progress
+from octoprint_wled import _version, api, constants, events, progress
 from octoprint_wled.util import get_wled_params
 from octoprint_wled.wled import WLED
 
@@ -18,14 +18,26 @@ class WLEDPlugin(
     octoprint.plugin.EventHandlerPlugin,
     octoprint.plugin.ProgressPlugin,
 ):
-    wled: Optional[WLED]
-    api: Optional[api.PluginAPI]
-    events: Optional[events.PluginEventHandler]
-    progress: Optional[progress.PluginProgressHandler]
-    lights_on: bool = True
+    def __init__(self):
+        super()
+        self.wled: Optional[WLED]
+        self.api: Optional[api.PluginAPI]
+        self.events: Optional[events.PluginEventHandler]
+        self.progress: Optional[progress.PluginProgressHandler]
+        self.lights_on: bool = True
+
+        # Heating & cooling detection flags
+        self.heating: bool = False
+        self.cooling: bool = False
+        self.target_temperature: Dict[str, int] = {"tool": 0, "bed": 0}
+        self.current_heater_heating: Optional[str] = None
+        self.tool_to_target: int = 0
+
+        self.current_progress: int = 0
 
     def initialize(self) -> None:
         # Called after all injections complete, startup of plugin
+        # These sub-modules depend on the rest of the plugin to be initialized.
         self.init_wled()
         self.api = api.PluginAPI(self)
         self.events = events.PluginEventHandler(self)
@@ -62,6 +74,113 @@ class WLEDPlugin(
         # Notify the UI
         self.send_message("lights", {"on": False})
         self.lights_on = False
+
+    # Gcode tracking hook
+    def process_gcode_queue(
+        self,
+        comm,
+        phase,
+        cmd: str,
+        cmd_type,
+        gcode: str,
+        subcode=None,
+        tags=None,
+        *args,
+        **kwargs,
+    ):
+        if gcode in constants.BLOCKING_TEMP_GCODES.keys():
+            self.heating = True
+            self.current_heater_heating = constants.BLOCKING_TEMP_GCODES[gcode]
+
+        else:
+            if self.heating:
+                # Currently heating, now stopping
+                self.heating = False
+                # TODO go back to previous effect
+
+    def temperatures_received(
+        self, comm, parsed_temps: Dict[str, Union[float, None]], *args, **kwargs
+    ):
+        tool_key = self._settings.get(["progress", "heating", "tool_key"])
+
+        # Find the tool target temperature
+        try:
+            tool_target = parsed_temps[f"T{tool_key}"][1]
+        except KeyError:
+            # Tool number was invalid, stick to whatever saved previously
+            tool_target = self.target_temperature["tool"]
+
+        # We don't always get the target when the printer is heating, instead None
+        if tool_target is None or tool_target <= 0:
+            tool_target = self.target_temperature["tool"]
+
+        # Find the bed target temperature
+        try:
+            bed_target = parsed_temps["B"][1]
+        except KeyError:
+            # Bed doesn't exist? Probably won't need bed temp
+            bed_target = self.target_temperature["tool"]
+
+        if bed_target is None or bed_target <= 0:
+            bed_target = self.target_temperature["bed"]
+
+        # Save these for later, so that they can be used on the next round for the above
+        self.target_temperature["tool"] = tool_target
+        self.target_temperature["bed"] = bed_target
+
+        if self.heating:
+            if self.current_heater_heating == "tool":
+                heater = f"T{tool_key}"
+            else:
+                heater = "B"
+            try:
+                current_temp = parsed_temps[heater][0]
+            except KeyError:
+                self._logger.warning(
+                    f"{heater} not found, can't show progress - check config"
+                )
+                self.heating = False
+                self.process_previous_event()
+                return parsed_temps
+
+            # self.update_effect(
+            #     "progress_heatup {}".format(
+            #         self.calculate_heatup_progress(
+            #             current_temp,
+            #             self.target_temperature[self.current_heater_heating],
+            #         )
+            #     )
+            # )
+
+        elif self.cooling:
+            bed_or_tool = self._settings.get(["progress", "cooling", "bed_or_tool"])
+            if bed_or_tool == "tool":
+                heater = "T{}".format(
+                    self._settings.get(["progress", "heating", "tool_key"])
+                )
+            else:
+                heater = "B"
+
+            current = parsed_temps[heater][0]
+
+            if current < self._settings.get_int(["progress", "cooling", "threshold"]):
+                self.cooling = False
+                self.process_previous_event()
+                return parsed_temps
+
+            self.progress.on_cooling_progress()
+
+            self.update_effect(
+                "progress_cooling {}".format(
+                    self.calculate_heatup_progress(
+                        current,
+                        self.target_temperature[bed_or_tool],
+                    )
+                )
+            )
+
+        # MUST always return parsed_temps
+        return parsed_temps
 
     # SimpleApiPlugin
     def get_api_commands(self) -> Dict[str, List[Optional[str]]]:
@@ -126,7 +245,21 @@ class WLEDPlugin(
                 # for inspiration :)
             },
             "progress": {
-                "print": {"enabled": True, "settings": []}
+                "print": {"enabled": True, "settings": []},
+                "heating": {
+                    "enabled": True,
+                    "settings": [],
+                    "tool": True,
+                    "bed": False,
+                    "tool_key": "0",
+                },
+                "cooling": {
+                    "enabled": True,
+                    "settings": [],
+                    "bed_or_tool": True,
+                    "tool_key": "0",
+                    "threshold": "40",
+                }
                 # Progress effects have a similar layout to the above, HOWEVER without:
                 # * color_tertiary
                 # * effect
@@ -202,5 +335,7 @@ def __plugin_load__():
 
     global __plugin_hooks__
     __plugin_hooks__ = {
-        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information
+        "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
+        "octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.process_gcode_queue,
+        "octoprint.comm.protocol.temperatures.received": __plugin_implementation__.temperatures_received,
     }
