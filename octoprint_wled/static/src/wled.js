@@ -25,7 +25,9 @@ $(function () {
     ]
 
     const allProgressNames = [
-      'print'
+      'print',
+      'heating',
+      'cooling'
     ]
 
     self.settingsViewModel = parameters[0]

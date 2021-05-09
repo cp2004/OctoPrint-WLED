@@ -2,7 +2,7 @@
 {% from "wled-settings/sub/editmodal.jinja2" import effectEditModal, progressEditModal %}
 
 {% macro effectOverview(identifier, name, description=None) %}
-    <tr class="table-heading">
+    <tr class="table-heading" title="{{ description }}">
     <td colspan="2">
         <p>{{ name }}</p>
     </td>
@@ -19,8 +19,8 @@
     {{ effectEditModal(identifier, name) }}
 {% endmacro %}
 
-{% macro progressOverview(identifier, name, description=None) %}
-    <tr class="table-heading">
+{% macro progressOverview(identifier, name, description=None, additional_options=None) %}
+    <tr class="table-heading" title="{{ description }}">
     <td colspan="2">
         <p>{{ name }}</p>
     </td>
@@ -33,6 +33,7 @@
         {{ macros.addProgressBtn(identifier) }}
     </td>
     </tr>
+    {{ additional_options }}
     {{ macros.effectList(identifier, "progress") }}
     {{ progressEditModal(identifier, name) }}
 {% endmacro %}

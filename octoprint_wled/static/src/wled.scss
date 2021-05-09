@@ -35,6 +35,10 @@ $col-widths: (10: 10%, 15: 15%, 35: 35%);
       font-size: small;
     }
   }
+  tr.table-heading-2 {
+    color: $table-highlight-color;
+    background: $table-highlight-bg;
+  }
 }
 #WLEDConnectionSettings {
   .text-align-left {

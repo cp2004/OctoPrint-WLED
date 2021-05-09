@@ -1,4 +1,60 @@
 {% import "wled-settings/sub/template.jinja2" as template %}
+{% import "wled-settings/sub/macros.jinja2" as macros %}
+
+{% macro heating_options() %}
+{# Adds the additional heating options, part of the table #}
+<tr class="table-heading-2">
+    <td></td>
+    <td> {# 35 width column #}
+        <label class="checkbox inline" style="display: block">
+            {{ macros.input("checkbox", "settingsViewModel.settings.plugins.wled.progress.heating.tool") }}
+            Track tool
+        </label>
+        <label class="checkbox inline" style="display: block; margin-left: 0">
+            {{ macros.input("checkbox", "settingsViewModel.settings.plugins.wled.progress.heating.bed") }}
+            Track bed
+        </label>
+    </td>
+    <td colspan="3">
+        <div style="display: inline-block">
+            <label>
+                Tool to track
+            </label>
+            <div class="input-prepend">
+                <span class="add-on">
+                    T
+                </span>
+                {{ macros.input("number", "settingsViewModel.settings.plugins.wled.progress.heating.tool_key", "input-small") }}
+            </div>
+        </div>
+    </td>
+    <td></td>
+</tr>
+{% endmacro %}
+
+{% macro cooling_options() %}
+{# Custom options for cooling progress #}
+<tr class="table-heading-2">
+    <td></td>
+    <td>
+        <label for="wled_progress_cooling_bed_tool">Track cooling on bed or tool:</label>
+        <select id="wled_progress_cooling_bed_tool" class="input-block" data-bind="value: settingsViewModel.settings.plugins.wled.progress.cooling.bed_or_tool">
+            <option value="tool">Track Tool</option>
+            <option value="bed">Track Bed</option>
+        </select>
+    </td>
+    <td colspan="3">
+        <label class="inline" for="ws_temp_threshold">Cooling temperature threshold</label>
+        <div class="input-append">
+            <input id="ws_temp_threshold" class="input-medium" type="number" data-bind="value: settingsViewModel.settings.plugins.wled.progress.cooling.threshold">
+            <span class="add-on">C</span>
+        </div>
+        {# TODO add some explanation or docs #}
+    </td>
+    <td></td>
+</tr>
+{% endmacro %}
+
 
 <table class="table">
     <thead>
@@ -13,5 +69,7 @@
     </thead>
     <tbody>
     {{ template.progressOverview("print", "Printing Progress", "Show the progress of the print") }}
+    {{ template.progressOverview("heating", "Heating Progress", "Show the heating progress of the printer", heating_options()) }}
+    {{ template.progressOverview("cooling", "Cooling Progress", "Show the cooling progress of the printer", cooling_options()) }}
     </tbody>
 </table>
