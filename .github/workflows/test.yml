@@ -18,10 +18,22 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.9
-      - name: 🏗 Install build dependencies
+      - name: 🏗 Install backend build dependencies
         run: |
           python -m pip install wheel --user
           python -m pip install octoprint[develop]
+      - uses: actions/checkout@v2
+      - name: 🏗 Setup Node 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: 🏗 Install frontend build dependencies
+        run: |
+          npm install -g npm@7
+          npm install
+      - name: 🔨 Build frontend code in release mode
+        run: |
+          npm run release
       - name: 🔨 Build a binary wheel and a source tarball
         run: |
           python setup.py sdist bdist_wheel
@@ -29,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: dist
-          path: dist
+          path: dist/*.zip
 
   pre-commit:
     name: 🧹 Pre-commit
@@ -85,3 +97,5 @@ jobs:
       - name: 🚀 Test install of plugin
         run: |
           pip install .
+          
+          
