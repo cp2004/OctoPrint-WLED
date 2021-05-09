@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: dist
-          path: dist/**/
+          path: dist
 
   pre-commit:
     name: 🧹 Pre-commit
@@ -97,5 +97,3 @@ jobs:
       - name: 🚀 Test install of plugin
         run: |
           pip install .
-          
-          
