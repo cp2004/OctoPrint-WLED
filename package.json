@@ -4,11 +4,12 @@
   "description": "Connect OctoPrint to WLED",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run dev\" \"npm run css-dev\"",
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development --watch",
     "css-dev": "sass --watch octoprint_wled/static/src/wled.scss octoprint_wled/static/dist/wled.css",
     "css-build": "sass --style=compressed --no-source-map octoprint_wled/static/src/wled.scss octoprint_wled/static/dist/wled.css",
-    "release": "npm run build && npm run css-build"
+    "release": "concurrently \"npm run build\" \"npm run css-build\""
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     ]
   },
   "dependencies": {
+    "concurrently": "^6.1.0",
     "nanoid": "^3.1.22"
   }
 }
