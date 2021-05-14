@@ -44,7 +44,9 @@ class PluginAPI:
         """
         return {"lights_on": self.plugin.lights_on}
 
-    def with_static_response(self, data: dict) -> flask.Response:
+    def with_static_response(self, data: Optional[dict] = None) -> flask.Response:
+        if data is None:
+            data = {}
         data.update(self.static_api_response())
         return flask.jsonify(data)
 
@@ -72,7 +74,7 @@ class PluginAPI:
                 return self.with_static_response({"error": True})
 
         # Generic empty response here
-        return self.with_static_response({})
+        return self.with_static_response()
 
     def on_api_get(self, request) -> flask.Response:
         if self.get_thread and self.get_thread.is_alive():
@@ -90,7 +92,9 @@ class PluginAPI:
         if wled:
             if not wled.device:
                 try:
-                    wled.update()
+                    self.plugin.runner.wled_call(
+                        wled.update, block=True, suppress_exceptions=False
+                    )
                 except (
                     WLEDEmptyResponseError,
                     WLEDConnectionError,
@@ -164,7 +168,9 @@ class PluginAPI:
             user_agent=f"OctoPrintWLED/{self.plugin._plugin_version}",
         ) as wled:
             try:
-                device = wled.update()
+                device = self.plugin.runner.wled_call(
+                    wled.update, block=True, suppress_exceptions=False
+                )
                 version = device.info.version
                 response = {
                     "success": True,

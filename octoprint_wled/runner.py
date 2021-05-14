@@ -44,7 +44,12 @@ class WLEDRunner:
     def kill(self):
         self.queue.put(KILL_MESSAGE)
 
-    def _call_wled(self, target, args=(), kwargs=None) -> Any:
+    def _call_wled(self, target, args=(), kwargs=None, suppress_exceptions=True) -> Any:
+        def log_caller():
+            self._logger.debug(f"Target: {target.__qualname__}")
+            self._logger.debug(f"Args: {args}")
+            self._logger.debug(f"Kwargs: {kwargs}")
+
         if kwargs is None:
             kwargs = {}
 
@@ -55,11 +60,21 @@ class WLEDRunner:
             response = target(*args, **kwargs)
         except WLEDError as e:
             # noinspection PyProtectedMember
-            self._logger.debug(f"Can't connect to WLED, {repr(e)}")
-            return
+            if suppress_exceptions:
+                self._logger.error(f"Can't connect to WLED, {repr(e)}")
+                log_caller()
+                return
+            else:
+                raise
         except Exception as e:
-            self._logger.exception(e)
-            return
+            if suppress_exceptions:
+                # Yeah that was bad naming. It means don't raise exceptions
+                # any higher up, just log and move on with life
+                self._logger.exception(f"Unknown error calling WLED: \n{e}")
+                log_caller()
+                return
+            else:
+                raise
 
         return response
 
@@ -69,6 +84,7 @@ class WLEDRunner:
         args: tuple = (),
         kwargs: Optional[dict] = None,
         block: bool = False,
+        suppress_exceptions: bool = True,
     ) -> Any:
         if kwargs is None:
             kwargs = {}
@@ -82,4 +98,4 @@ class WLEDRunner:
             self.queue.put(message)
         else:
             # Call synchronously, if the response is needed
-            return self._call_wled(target, args, kwargs)
+            return self._call_wled(target, args, kwargs, suppress_exceptions)

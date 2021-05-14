@@ -4,11 +4,6 @@ from typing import Optional
 
 import octoprint_wled
 from octoprint_wled.util import hex_to_rgb
-from octoprint_wled.wled.exceptions import (
-    WLEDConnectionError,
-    WLEDConnectionTimeoutError,
-    WLEDEmptyResponseError,
-)
 
 
 class PluginProgressHandler:
@@ -27,7 +22,7 @@ class PluginProgressHandler:
         self.set_progress(value, "heating")
 
     def on_cooling_progress(self, value: int):
-        self.set_progress(value, "heating")
+        self.set_progress(value, "cooling")
 
     def set_progress(self, value: int, progress_type: str):
         # Check WLED is setup & ready
@@ -61,53 +56,19 @@ class PluginProgressHandler:
             self._logger.debug(
                 f"Setting {progress_type} progress to segment {segment['id']}"
             )
-
-            try:
-                # Try and set the effect to WLED
-                self.plugin.runner.wled_call(
-                    self.plugin.wled.segment,
-                    kwargs={
-                        "segment_id": int(segment["id"]),
-                        "brightness": int(segment["brightness"]),
-                        "color_primary": hex_to_rgb(segment["color_primary"]),
-                        "color_secondary": hex_to_rgb(segment["color_secondary"]),
-                        "effect": "Percent",
-                        "intensity": int(value),
-                        "on": lights_on,
-                    },
-                )
-                response = {}
-                # TODO remove all this error handling, move to runner
-                # It will never fire under current handling
-            except (
-                WLEDEmptyResponseError,
-                WLEDConnectionError,
-                WLEDConnectionTimeoutError,
-            ) as exception:
-                # Known exception, reported to frontend on the websocket
-                error = (
-                    f"Error setting {progress_type} progress to segment {segment['id']}"
-                )
-                self._logger.error(error),
-                self._logger.error(repr(exception))
-                response = {
-                    "success": False,
-                    "error": error,
-                    "exception": repr(exception),
-                }
-            except Exception as exception:
-                # Something else wrong... Needs handling to report to user.
-                error = (
-                    f"Error setting {progress_type} progress to segment {segment['id']}, "
-                    f"consult the log for details."
-                )
-                self._logger.error(error)
-                self._logger.exception(exception)
-                response = {"success": False, "error": error, "exception": ""}
-
-            if response:
-                # Update the UI if necessary
-                self.plugin.send_message("event_update_effect", response)
+            # Try and set the effect to WLED
+            self.plugin.runner.wled_call(
+                self.plugin.wled.segment,
+                kwargs={
+                    "segment_id": int(segment["id"]),
+                    "brightness": int(segment["brightness"]),
+                    "color_primary": hex_to_rgb(segment["color_primary"]),
+                    "color_secondary": hex_to_rgb(segment["color_secondary"]),
+                    "effect": "Percent",
+                    "intensity": int(value),
+                    "on": lights_on,
+                },
+            )
 
         if turn_lights_on:
             self.plugin.activate_lights()

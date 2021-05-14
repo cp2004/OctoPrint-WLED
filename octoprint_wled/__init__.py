@@ -64,23 +64,21 @@ class WLEDPlugin(
             self._logger.exception(repr(e))
 
         # Notify the UI
-        # WARNING: this still occurs even if there was an error above
-        # TODO is this the best option? Probably not. But it prevents crucial blocking
-        # in the gcode & temperatures received hooks. Which is bad.
+        # WARNING: this still occurs even if there was an error above - it prevents crucial blocking
+        # in the gcode & temperatures received hooks. Which is bad, which is why this is not sync.
         self.send_message("lights", {"on": True})
         self.lights_on = True
 
     def deactivate_lights(self) -> None:
         self._logger.info("Turning WLED lights off")
-        try:
-            self.wled.master(on=False)
-        except Exception as e:
-            self._logger.error("Error while turning WLED lights off")
-            self._logger.exception(repr(e))
-        # If we got this far there was no error
-        # Notify the UI
-        self.send_message("lights", {"on": False})
-        self.lights_on = False
+        # TODO async?
+        response = self.runner.wled_call(
+            self.wled.master, kwargs={"on": False}, block=True
+        )
+        if response:
+            # Notify the UI, if we got this far there was no issue
+            self.send_message("lights", {"on": False})
+            self.lights_on = False
 
     # Gcode tracking hook
     def process_gcode_queue(
