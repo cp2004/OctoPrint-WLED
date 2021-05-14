@@ -33,7 +33,7 @@
         {{ macros.addProgressBtn(identifier) }}
     </td>
     </tr>
-    {{ additional_options }}
+    {% if additional_options %}{{ additional_options }}{% endif %}
     {{ macros.effectList(identifier, "progress") }}
     {{ progressEditModal(identifier, name) }}
 {% endmacro %}
