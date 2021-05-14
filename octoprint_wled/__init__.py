@@ -219,7 +219,7 @@ class WLEDPlugin(
                 "username": None,
                 "password": "",
                 "port": 80,
-                "request_timeout": 8,
+                "request_timeout": 2,
                 "tls": False,
                 "verify_ssl": True,
             },
