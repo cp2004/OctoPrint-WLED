@@ -5,7 +5,7 @@ from typing import Dict, Optional
 from octoprint.events import Events
 
 import octoprint_wled
-from octoprint_wled.util import hex_to_rgb, start_thread
+from octoprint_wled.util import hex_to_rgb
 
 
 class PluginEventHandler:
@@ -29,9 +29,8 @@ class PluginEventHandler:
     def on_event(self, event, payload) -> None:
         if event in self.event_to_effect.keys():
             self.last_event = event
-            start_thread(
-                self.update_effect, kwargs={"effect": self.event_to_effect[event]}
-            )
+            # This is async, no need for threading
+            self.update_effect(effect=self.event_to_effect[event])
         if event == Events.PRINT_DONE:
             self.plugin.cooling = True
 

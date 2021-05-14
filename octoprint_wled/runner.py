@@ -3,11 +3,11 @@ Handles all calling the API of WLED in a non-blocking way (most of the time)
 """
 import logging
 import queue
-import threading
 from typing import Any, Optional
 
 import octoprint_wled
 from octoprint_wled.constants import KILL_MESSAGE
+from octoprint_wled.util import start_thread
 from octoprint_wled.wled import WLEDError
 
 # Effects are put into the queue like this:
@@ -21,9 +21,7 @@ class WLEDRunner:
         self.queue = queue.Queue()
         self._logger = logging.getLogger("octoprint.plugins.wled.runner")
 
-        self.runner = threading.Thread(target=self.runner_thread)
-        self.runner.daemon = True
-        self.runner.start()
+        self.runner_thread = start_thread(self.runner_thread)
 
     def runner_thread(self):
         while True:
@@ -43,6 +41,7 @@ class WLEDRunner:
 
     def kill(self):
         self.queue.put(KILL_MESSAGE)
+        self.runner_thread.join(5)
 
     def _call_wled(self, target, args=(), kwargs=None, suppress_exceptions=True) -> Any:
         def log_caller():

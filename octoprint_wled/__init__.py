@@ -11,7 +11,7 @@ __version__ = _version.get_versions()["version"]
 
 
 class WLEDPlugin(
-    octoprint.plugin.StartupPlugin,
+    octoprint.plugin.ShutdownPlugin,
     octoprint.plugin.SettingsPlugin,
     octoprint.plugin.AssetPlugin,
     octoprint.plugin.TemplatePlugin,
@@ -207,6 +207,10 @@ class WLEDPlugin(
     # Print Progress handling
     def on_print_progress(self, storage, path, progress_value):
         self.progress.on_print_progress(progress_value)
+
+    # Shutdown handling
+    def on_shutdown(self):
+        self.runner.kill()
 
     # SettingsPlugin
     def get_settings_defaults(self) -> Dict[str, Any]:
