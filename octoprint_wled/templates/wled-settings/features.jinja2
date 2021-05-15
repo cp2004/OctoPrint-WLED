@@ -1,0 +1,38 @@
+{% import "wled-settings/sub/macros.jinja2" as macros %}
+
+{% macro at_command() %}
+<tr class="table-heading-2">
+    <td></td>
+    <td>
+        <label class="checkbox inline d-block fw-bold">
+            {{ macros.input("checkbox", "settingsViewModel.settings.plugins.wled.features.atcommand") }}
+            Enable @ command reaction
+        </label>
+        <p class="d-block">
+            Host @ commands can be used in GCODE scripts, custom controls or sent directly from the OctoPrint
+            terminal to control OctoPrint. The WLED plugin reacts to commands that start with <code>@WLED</code>:
+        </p>
+        <ul>
+            <li><code>@WLED ON</code> turns all the LEDs on</li>
+            <li><code>@WLED OFF</code> turns all the LEDs off</li>
+        </ul>
+        <p class="d-block">
+            These are not case sensitive.
+        </p>
+    </td>
+    <td></td>
+</tr>
+{% endmacro %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th class="colwidth-10"></th>  {# These widths have been carefully fine tuned... Try not to break them :) #}
+        <th class="colwidth-80"></th>
+        <th class="colwidth-10"></th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ at_command() }}
+    </tbody>
+</table>

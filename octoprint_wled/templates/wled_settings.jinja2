@@ -37,6 +37,7 @@
     <ul class="nav nav-pills">
         <li class="active"><a href="#wledPrinter" data-toggle="tab">Printing effects</a></li>
         <li><a href="#wledProgress" data-toggle="tab">Progress effects</a></li>
+        <li><a href="#wledFeatures" data-toggle="tab">Features</a></li>
         <li><a href="#wledAbout" data-toggle="tab">About</a></li>
     </ul>
     <div class="tab-content">
@@ -45,6 +46,9 @@
         </div>
         <div class="tab-pane" id="wledProgress">
             {% include 'wled-settings/progress.jinja2' %}
+        </div>
+        <div class="tab-pane" id="wledFeatures">
+            {% include "wled-settings/features.jinja2" %}
         </div>
         <div class="tab-pane" id="wledAbout">
             {% include "wled-settings/about.jinja2" %}

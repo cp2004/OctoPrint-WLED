@@ -184,6 +184,20 @@ class WLEDPlugin(
         # MUST always return parsed_temps
         return parsed_temps
 
+    # @ command handling - commands defined in constants.py
+    def process_at_command(
+        self, comm, phase, cmd, parameters, tags=None, *args, **kwargs
+    ):
+        if cmd != constants.AT_WLED or not self._settings.get_boolean(
+            ["features", "atcommand"]
+        ):
+            return
+
+        if parameters == constants.AT_PARAM_ON:
+            self.activate_lights()
+        elif parameters == constants.AT_PARAM_OFF:
+            self.deactivate_lights()
+
     # SimpleApiPlugin
     def get_api_commands(self) -> Dict[str, List[Optional[str]]]:
         return self.api.get_api_commands()
@@ -273,6 +287,9 @@ class WLEDPlugin(
                 # * intensity (controlled by progress value)
             },
             "development": False,
+            "features": {
+                "atcommand": True,
+            },
         }
 
     def get_settings_version(self):
@@ -344,4 +361,5 @@ def __plugin_load__():
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
         "octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.process_gcode_queue,
         "octoprint.comm.protocol.temperatures.received": __plugin_implementation__.temperatures_received,
+        "octoprint.comm.protocol.atcommand.queuing": __plugin_implementation__.process_at_command,
     }
