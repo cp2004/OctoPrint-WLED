@@ -18,7 +18,7 @@
 <div class="control-group">
     <label for="WLED-{{ identifier }}-EffectSelect" class="control-label">Effect</label>
     <div class="controls">
-        <select data-bind="value: effects.{{ identifier }}.editing().effect,
+        <select id="WLED-{{ identifier }}-EffectSelect" data-bind="value: effects.{{ identifier }}.editing().effect,
                            options: availableEffects(),
                            optionsCaption: 'Choose an effect...',
                            enable: statusConnected,
@@ -35,7 +35,7 @@
 {% endmacro %}
 
 {% macro effectEditModal(identifier, name) %}
-<div id="WLED{{ identifier }}EditModal" class="modal hide fade">
+<div id="WLED{{ identifier }}EditModal" class="modal hide fade-in">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>
@@ -54,14 +54,13 @@
         {{ settingsInput("Overrides on/off", "checkbox", "effects", identifier, "override_on", "When checked, this effect will always turn all the WLED LEDs back on, if they are off") }}
     </div>
     <div class="modal-footer">
-        <!-- TODO reset to defaults button? -->
         <button data-dismiss="modal" class="btn">Close</button>
     </div>
 </div>
 {% endmacro %}
 
 {% macro progressEditModal(identifier, name) %}
-    <div id="WLED{{ identifier }}ProgressEditModal" class="modal hide fade">
+    <div id="WLED{{ identifier }}ProgressEditModal" class="modal hide fade-in">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>
@@ -76,7 +75,6 @@
         {{ settingsInput("Overrides on/off", "checkbox", "progress", identifier, "override_on", "When checked, this effect will always turn all the WLED LEDs back on, if they are off") }}
     </div>
     <div class="modal-footer">
-        <!-- TODO reset to defaults button? -->
         <button data-dismiss="modal" class="btn">Close</button>
     </div>
 </div>

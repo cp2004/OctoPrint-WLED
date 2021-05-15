@@ -24,7 +24,7 @@
                 <span class="add-on">
                     T
                 </span>
-                {{ macros.input("number", "settingsViewModel.settings.plugins.wled.progress.heating.tool_key", "input-small") }}
+                {{ macros.input("number", "settingsViewModel.settings.plugins.wled.progress.heating.tool_key", "input-small text-align-left") }}
             </div>
         </div>
     </td>
@@ -46,7 +46,7 @@
     <td colspan="3">
         <label class="inline" for="ws_temp_threshold">Cooling temperature threshold</label>
         <div class="input-append">
-            <input id="ws_temp_threshold" class="input-medium" type="number" data-bind="value: settingsViewModel.settings.plugins.wled.progress.cooling.threshold">
+            <input id="ws_temp_threshold" class="input-small" type="number" data-bind="value: settingsViewModel.settings.plugins.wled.progress.cooling.threshold">
             <span class="add-on">C</span>
         </div>
         {# TODO add some explanation or docs #}

@@ -47,12 +47,12 @@
         {% endfor %}
     </td>
     <td>
-        <button class="btn btn-danger" title="Delete {{ identifier }} effect" data-bind="click: function(){ $root.{{ delete }}('{{ identifier }}', $data)}">
-            <i class="fas fa-trash-alt fa-fw"></i> {# TODO fix #}
+        <button class="btn btn-danger" title="Delete {{ identifier|capitalize }} effect" data-bind="click: function(){ $root.{{ delete }}('{{ identifier }}', $data)}">
+            <i class="fas fa-trash-alt fa-fw"></i>
         </button>
     </td>
     <td>
-        <button class="btn btn-primary" title="Edit {{ identifier }} effect" data-bind="click: function(){ $root.{{ edit }}('{{ identifier }}', $data) }">
+        <button class="btn btn-primary" title="Edit {{ identifier|capitalize }} effect" data-bind="click: function(){ $root.{{ edit }}('{{ identifier }}', $data) }">
             <i class="far fa-edit fa-fw"></i>
         </button>
     </td>
