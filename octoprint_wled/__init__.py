@@ -186,12 +186,15 @@ class WLEDPlugin(
 
     # @ command handling - commands defined in constants.py
     def process_at_command(
-        self, comm, phase, cmd, parameters, tags=None, *args, **kwargs
+        self, comm, phase, cmd: str, parameters: str, tags=None, *args, **kwargs
     ):
         if cmd != constants.AT_WLED or not self._settings.get_boolean(
             ["features", "atcommand"]
         ):
             return
+
+        cmd = cmd.upper()
+        parameters = parameters.upper()
 
         if parameters == constants.AT_PARAM_ON:
             self.activate_lights()
