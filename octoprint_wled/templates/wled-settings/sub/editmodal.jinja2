@@ -16,13 +16,20 @@
 
 {% macro effectSelect(identifier) %}
 <div class="control-group">
-    <label class="control-label">Effect</label>
+    <label for="WLED-{{ identifier }}-EffectSelect" class="control-label">Effect</label>
     <div class="controls">
         <select data-bind="value: effects.{{ identifier }}.editing().effect,
                            options: availableEffects(),
                            optionsCaption: 'Choose an effect...',
-                           enable: statusConnected">
+                           enable: statusConnected,
+                           valueAllowUnset: true"
+        >
         </select>
+        <!-- ko ifnot: statusConnected -->
+        <p class="help-block">
+            <i class="fas fa-times text-error"></i> Please connect to WLED to choose an effect
+        </p>
+        <!-- /ko -->
     </div>
 </div>
 {% endmacro %}
