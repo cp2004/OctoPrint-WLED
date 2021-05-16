@@ -156,7 +156,8 @@ class WLEDPlugin(
                 current, self.target_temperature[self.current_heater_heating]
             )
             self._logger.debug(f"Heating, progress {value}%")
-            self.progress.on_heating_progress(value)
+            if self._settings.get(["progress", "heating", self.current_heater_heating]):
+                self.progress.on_heating_progress(value)
 
         elif self.cooling:
             bed_or_tool = self._settings.get(["progress", "cooling", "bed_or_tool"])
