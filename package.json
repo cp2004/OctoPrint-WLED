@@ -53,6 +53,6 @@
   },
   "dependencies": {
     "concurrently": "^6.1.0",
-    "nanoid": "^3.1.22"
+    "nanoid": "^3.1.23"
   }
 }
