@@ -49,15 +49,22 @@
             <input id="ws_temp_threshold" class="input-small" type="number" data-bind="value: settingsViewModel.settings.plugins.wled.progress.cooling.threshold">
             <span class="add-on">C</span>
         </div>
-        {# TODO add some explanation or docs #}
+        <p class="d-block">
+            Cooling progress will stop once the temperature gets to this value.
+        </p>
     </td>
     <td></td>
 </tr>
 {% endmacro %}
-
+<p>
+    Progress effects simulate a progress bar, with two colours. Progress is shown per-segment.
+</p>
+<p>
+    You can customize the colours and some additional configuration for each event type.
+</p>
 
 <table class="table">
-    <thead>
+    <thead class="visibility-collapse">
     <tr>
         <th class="colwidth-10"></th>  {# These widths have been carefully fine tuned... Try not to break them :) #}
         <th class="colwidth-35"></th>

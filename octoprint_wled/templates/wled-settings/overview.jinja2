@@ -1,7 +1,12 @@
 {% import "wled-settings/sub/template.jinja2" as template %}
-
+<p>
+    Enable the events you want the plugin to react to below, then add effect configurations for each event.
+</p>
+<p>
+    Segments need to be configured in WLED for the plugin to be able to use them.
+</p>
 <table class="table">
-    <thead>
+    <thead class="visibility-collapse">
     <tr>
         <th class="colwidth-10"></th>  {# These widths have been carefully fine tuned... Try not to break them :) #}
         <th class="colwidth-35"></th>
@@ -12,11 +17,11 @@
     </tr>
     </thead>
     <tbody>
-    {{ template.effectOverview("idle", "Idle", "Fires when the printer is connected.") }}
+    {{ template.effectOverview("idle", "Idle (Connected)", "Fires when the printer is connected.") }}
     {{ template.effectOverview("disconnected", "Disconnected") }}
     {{ template.effectOverview("started", "Print Started") }}
-    {{ template.effectOverview("failed", "Failed") }}
-    {{ template.effectOverview("success", "Success") }}
-    {{ template.effectOverview("paused", "Paused") }}
+    {{ template.effectOverview("failed", "Print Failed") }}
+    {{ template.effectOverview("success", "Print Success") }}
+    {{ template.effectOverview("paused", "Print Paused") }}
     </tbody>
 </table>
