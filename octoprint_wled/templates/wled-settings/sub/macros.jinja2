@@ -33,18 +33,21 @@
 
     <!-- ko foreach: {{ type }}.{{ identifier }}.segments() -->
     <tr data-bind="visible: $root.{{ type }}.{{ identifier }}.enabled">
-    <td></td>
-    <td colspan="2">
-        <span class="fw-bold">Segment: </span><span data-bind="text: id"></span>
-        {% if type == "effects" %}
-        <span class="fw-bold gap-left">Effect: </span><span data-bind="text: effect"></span>
-        {% endif %}
-        <span class="fw-bold gap-left">Colors:</span>
-        {% for color in colours %}
-        <svg class="gap-left text-align-center" width="15" height="15">
-            <rect rx="2" ry="2" width="15" height="15" style="stroke: black;stroke-width: 1px" data-bind="attr: {fill: color_{{ color }}}" ></rect>
-        </svg>
-        {% endfor %}
+    <td colspan="3">
+        <div class="effect-overview">
+            <span class="fw-bold">Segment: </span><span data-bind="text: id"></span>
+            {% if type == "effects" %}
+            <span class="fw-bold gap-left">Effect: </span><span data-bind="text: effect"></span>
+            {% endif %}
+            <span class="fw-bold gap-left">Colors:</span>
+            <div>
+                {% for color in colours %}
+                <svg class="gap-left text-align-center" width="15" height="15">
+                    <rect rx="2" ry="2" width="15" height="15" style="stroke: black;stroke-width: 1px" data-bind="attr: {fill: color_{{ color }}}" ></rect>
+                </svg>
+                {% endfor %}
+            </div>
+        </div>
     </td>
     <td>
         <button class="btn btn-danger" title="Delete {{ identifier|capitalize }} effect" data-bind="click: function(){ $root.{{ delete }}('{{ identifier }}', $data)}">
