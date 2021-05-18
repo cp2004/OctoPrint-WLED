@@ -245,11 +245,91 @@ class WLEDPlugin(
             },
             "effects": {
                 "idle": {"enabled": True, "settings": []},
-                "disconnected": {"enabled": False, "settings": []},
-                "failed": {"enabled": False, "settings": []},
-                "started": {"enabled": False, "settings": []},
-                "success": {"enabled": False, "settings": []},
-                "paused": {"enabled": False, "settings": []},
+                "disconnected": {
+                    "enabled": True,
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#000000",
+                            "color_secondary": "#000000",
+                            "color_tertiary": "#000000",
+                            "effect": "Rainbow",
+                            "id": 0,
+                            "intensity": 127,
+                            "override_on": False,
+                            "speed": 127,
+                            "unique_id": "CcU-Mih1",
+                        }
+                    ],
+                },
+                "failed": {
+                    "enabled": True,
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#00ff2a",
+                            "color_secondary": "#000000",
+                            "color_tertiary": "#000000",
+                            "effect": "Wipe",
+                            "id": 0,
+                            "intensity": 127,
+                            "override_on": False,
+                            "speed": 127,
+                            "unique_id": "21pW5WCy",
+                        }
+                    ],
+                },
+                "started": {
+                    "enabled": False,
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#ffffff",
+                            "color_secondary": "#000000",
+                            "color_tertiary": "#000000",
+                            "effect": "Solid",
+                            "id": 0,
+                            "intensity": 127,
+                            "override_on": False,
+                            "speed": 127,
+                            "unique_id": "5N8Sa14y",
+                        }
+                    ],
+                },
+                "success": {
+                    "enabled": True,
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#1adb00",
+                            "color_secondary": "#000000",
+                            "color_tertiary": "#000000",
+                            "effect": "Washing Machine",
+                            "id": 0,
+                            "intensity": 127,
+                            "override_on": False,
+                            "speed": 127,
+                            "unique_id": "POL9wP_Y",
+                        }
+                    ],
+                },
+                "paused": {
+                    "enabled": True,
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#3e33e1",
+                            "color_secondary": "#000000",
+                            "color_tertiary": "#1fdaff",
+                            "effect": "Sinelon Dual",
+                            "id": 0,
+                            "intensity": 127,
+                            "override_on": False,
+                            "speed": "45",
+                            "unique_id": "WtKQwSu0",
+                        }
+                    ],
+                },
                 # example settings entry, per segment
                 # {
                 #   "unique_id": 0              # UNIQUE internal ID of this segment. So it can be edited easily
@@ -269,17 +349,47 @@ class WLEDPlugin(
                 # for inspiration :)
             },
             "progress": {
-                "print": {"enabled": True, "settings": []},
+                "print": {
+                    "enabled": True,
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#bb2525",
+                            "color_secondary": "#00ff59",
+                            "id": 0,
+                            "override_on": False,
+                            "unique_id": "yqvg8h0c",
+                        }
+                    ],
+                },
                 "heating": {
                     "enabled": True,
-                    "settings": [],
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#bb2525",
+                            "color_secondary": "#0083f5",
+                            "id": 0,
+                            "override_on": False,
+                            "unique_id": "sduhc3fh",
+                        }
+                    ],
                     "tool": True,
-                    "bed": False,
+                    "bed": True,
                     "tool_key": "0",
                 },
                 "cooling": {
                     "enabled": True,
-                    "settings": [],
+                    "settings": [
+                        {
+                            "brightness": 200,
+                            "color_primary": "#bb2525",
+                            "color_secondary": "#0083f5",
+                            "id": 0,
+                            "override_on": False,
+                            "unique_id": "argrsh53",
+                        }
+                    ],
                     "bed_or_tool": "tool",
                     "tool_key": "0",
                     "threshold": "40",
