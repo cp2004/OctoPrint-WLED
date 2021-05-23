@@ -29,7 +29,7 @@ class PluginEventHandler:
     def on_event(self, event, payload) -> None:
         # noinspection PyProtectedMember
         if event == Events.PRINT_STARTED:
-            self.cooling = False
+            self.plugin.cooling = False
 
         if event == Events.PRINT_DONE and self.plugin._settings.get_boolean(
             ["progress", "cooling", "enabled"]
