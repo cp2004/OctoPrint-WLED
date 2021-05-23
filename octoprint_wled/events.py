@@ -27,12 +27,19 @@ class PluginEventHandler:
         self.last_event: Optional[str] = None
 
     def on_event(self, event, payload) -> None:
-        if event in self.event_to_effect.keys():
+        # noinspection PyProtectedMember
+        if event == Events.PRINT_STARTED:
+            self.cooling = False
+
+        if event == Events.PRINT_DONE and self.plugin._settings.get_boolean(
+            ["progress", "cooling", "enabled"]
+        ):
+            self.plugin.cooling = True
+
+        elif event in self.event_to_effect.keys():
             self.last_event = event
             # This is async, no need for threading
             self.update_effect(effect=self.event_to_effect[event])
-        if event == Events.PRINT_DONE:
-            self.plugin.cooling = True
 
     def update_effect(self, effect) -> None:
         """
@@ -57,6 +64,7 @@ class PluginEventHandler:
         if not effect_enabled:
             self._logger.debug("Effect not enabled, not running")
             return
+
         if not effect_settings:
             self._logger.warning(
                 "Effect enabled but no settings could be found, check config"

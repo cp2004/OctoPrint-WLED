@@ -95,6 +95,7 @@ class WLEDPlugin(
     ):
         if gcode in constants.BLOCKING_TEMP_GCODES.keys():
             self.heating = True
+            self.cooling = False  # can't do both at the same time...
             self.current_heater_heating = constants.BLOCKING_TEMP_GCODES[gcode]
 
         else:
@@ -172,7 +173,8 @@ class WLEDPlugin(
 
             if current < self._settings.get_int(["progress", "cooling", "threshold"]):
                 self.cooling = False
-                # self.process_previous_event()
+                # Run PRINT_DONE again, instead of when it actually happened.
+                self.events.update_effect("success")
                 return parsed_temps
 
             value = calculate_heating_progress(
