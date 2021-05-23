@@ -43,11 +43,13 @@ class PluginProgressHandler:
 
         if not enabled:
             self._logger.debug(f"Progress {progress_type} not enabled, not running")
+            return
 
         if not effect_settings:
             self._logger.warning(
                 f"Progress {progress_type} enabled but no settings found, check config"
             )
+            return
 
         for segment in effect_settings:
             if segment["override_on"]:
