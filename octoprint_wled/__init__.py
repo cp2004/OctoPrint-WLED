@@ -354,8 +354,8 @@ class WLEDPlugin(
                     "settings": [
                         {
                             "brightness": 200,
-                            "color_primary": "#bb2525",
-                            "color_secondary": "#00ff59",
+                            "color_primary": "#00ff59",
+                            "color_secondary": "#bb2525",
                             "id": 0,
                             "override_on": False,
                             "unique_id": "yqvg8h0c",
