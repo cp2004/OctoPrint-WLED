@@ -16,13 +16,18 @@ class PluginProgressHandler:
         self.last_print_progress: Optional[int] = None
 
     def on_print_progress(self, value: int):
-        self.set_progress(value, "print")
+        self.last_print_progress = value
+        if not (self.plugin.cooling or self.plugin.heating):
+            self.set_progress(value, "print")
 
     def on_heating_progress(self, value: int):
         self.set_progress(value, "heating")
 
     def on_cooling_progress(self, value: int):
         self.set_progress(value, "cooling")
+
+    def return_to_print_progress(self):
+        self.on_print_progress(self.last_print_progress)
 
     def set_progress(self, value: int, progress_type: str):
         # Check WLED is setup & ready

@@ -102,7 +102,8 @@ class WLEDPlugin(
             if self.heating:
                 # Currently heating, now stopping
                 self.heating = False
-                # TODO go back to previous effect
+                if self._printer.is_printing():
+                    self.progress.return_to_print_progress()
 
     def temperatures_received(
         self,
