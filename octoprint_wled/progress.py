@@ -2,6 +2,8 @@ import copy
 import logging
 from typing import Optional
 
+from octoprint.events import Events
+
 import octoprint_wled
 from octoprint_wled.util import hex_to_rgb
 
@@ -16,6 +18,10 @@ class PluginProgressHandler:
         self.last_print_progress: Optional[int] = None
 
     def on_print_progress(self, value: int):
+        if value == 100 and self.plugin.events.last_event == Events.PRINT_DONE:
+            # 100% progress will sometimes come through after finish, which ruins PRINT_DONE
+            return
+
         self.last_print_progress = value
         if not (self.plugin.cooling or self.plugin.heating):
             self.set_progress(value, "print")
