@@ -18,11 +18,10 @@ $animation-duration: 0.3s;
   .gap-right {
     margin-right: $gap-spacer;
   }
-  .text-align-center {
-    text-align: center;
-  }
-  .text-align-left {
-    text-align: left;
+  @each $direction in (center, left, right){
+    .text-align-#{$direction}{
+      text-align: $direction;
+    }
   }
 
   tr.table-heading {
@@ -125,5 +124,13 @@ d-block {
 
   > * {
     padding-left: 0.2rem;
+  }
+}
+
+.input-flex-container {
+  display: flex;
+  align-items: center;
+  &> * > input {
+    margin-left: 0.5rem;
   }
 }

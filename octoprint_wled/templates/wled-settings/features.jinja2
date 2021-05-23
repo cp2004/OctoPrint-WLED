@@ -24,6 +24,27 @@
 </tr>
 {% endmacro %}
 
+{% macro return_idle() %}
+    <tr class="table-heading-2">
+    <td></td>
+    <td>
+        <div class="input-flex-container">
+            <label for="wled_return_idle" class="fw-bold">
+                Return to idle after:
+            </label>
+            <div class="input-append">
+                <input id="wled_return_idle" type="text" class="text-align-right input-small" data-bind="value: settingsViewModel.settings.plugins.wled.features.return_to_idle">
+                <span class="add-on">secs</span>
+            </div>
+        </div>
+        <p class="d-block">
+            Set to 0 to disable. When enabled, the idle effect will run after the print is finished, after the configured length of time.
+        </p>
+    </td>
+    <td></td>
+    </tr>
+{% endmacro %}
+
 <p>
     Enable some optional features for the plugin here.
 </p>
@@ -38,5 +59,6 @@
     </thead>
     <tbody>
     {{ at_command() }}
+    {{ return_idle() }}
     </tbody>
 </table>

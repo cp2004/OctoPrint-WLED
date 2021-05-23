@@ -1,5 +1,6 @@
 import copy
 import logging
+import threading
 from typing import Dict, Optional
 
 from octoprint.events import Events
@@ -25,6 +26,7 @@ class PluginEventHandler:
         }
 
         self.last_event: Optional[str] = None
+        self._return_to_idle: Optional[threading.Timer] = None
 
     def on_event(self, event, payload) -> None:
         # noinspection PyProtectedMember
@@ -38,8 +40,24 @@ class PluginEventHandler:
 
         elif event in self.event_to_effect.keys():
             self.last_event = event
+            if self._return_to_idle and self._return_to_idle.is_alive():
+                self._return_to_idle.cancel()
+
             # This is async, no need for threading
             self.update_effect(effect=self.event_to_effect[event])
+
+        # Start 'return to idle' timer if neccessary
+        if event == Events.PRINT_DONE:
+            # noinspection PyProtectedMember
+            idle_timeout = self.plugin._settings.get_int(["features", "return_to_idle"])
+            if idle_timeout > 0:
+                if self._return_to_idle and self._return_to_idle.is_alive():
+                    self._return_to_idle.cancel()
+
+                self._return_to_idle = threading.Timer(
+                    idle_timeout, self.update_effect, kwargs={"effect": "idle"}
+                )
+                self._return_to_idle.start()
 
     def update_effect(self, effect) -> None:
         """

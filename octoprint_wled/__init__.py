@@ -399,6 +399,7 @@ class WLEDPlugin(
             "development": False,
             "features": {
                 "atcommand": True,
+                "return_to_idle": 0,
             },
         }
 
