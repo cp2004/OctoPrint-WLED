@@ -57,11 +57,7 @@ class WLEDPlugin(
 
     def activate_lights(self) -> None:
         self._logger.info("Turning WLED lights on")
-        try:
-            self.runner.wled_call(self.wled.master, kwargs={"on": True})
-        except Exception as e:
-            self._logger.error("Error while turning WLED lights on")
-            self._logger.exception(repr(e))
+        self.runner.wled_call(self.wled.master, kwargs={"on": True})
 
         # Notify the UI
         # WARNING: this still occurs even if there was an error above - it prevents crucial blocking
@@ -71,14 +67,11 @@ class WLEDPlugin(
 
     def deactivate_lights(self) -> None:
         self._logger.info("Turning WLED lights off")
-        # TODO async?
-        response = self.runner.wled_call(
-            self.wled.master, kwargs={"on": False}, block=True
-        )
-        if response:
-            # Notify the UI, if we got this far there was no issue
-            self.send_message("lights", {"on": False})
-            self.lights_on = False
+        self.runner.wled_call(self.wled.master, kwargs={"on": False})
+
+        # See above for explanation of why this does not mean it was a success
+        self.send_message("lights", {"on": False})
+        self.lights_on = False
 
     # Gcode tracking hook
     def process_gcode_queue(
