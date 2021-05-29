@@ -27,12 +27,10 @@ aims to provide a similar experience of high configurability with ease of use.
   - Print success
   - Print failed
   - Print paused
-- Displaying printing progress
-- Highly configurable settings
-- Easy to use UI
+- Displaying printing, heating & cooling progress
+- Controlling the lights using @ commands
+- Highly configurable settings and an easy to use UI
 - ... and more!
-
-**This project is still under development, please be patient as bugs are fixed and features are added!**
 
 ## Setup
 
@@ -75,8 +73,7 @@ If you are feeling like contributing a new feature, feel free to open an issue s
 To setup the node environment for frontend stuff:
 
 * Install: `npm install`
-* Watch JS development mode: `npm run dev`
-* Watch CSS development mode: `npm run dev-css`
+* Build & watch static assets in development mode: `npm start`
 * Build both assets in release mode: `npm run release`
 
 These files *should not* be checked in, they are built on release automatically by a GitHub action.
