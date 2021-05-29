@@ -27,7 +27,7 @@
   "homepage": "https://github.com/cp2004/OctoPrint-WLED#readme",
   "devDependencies": {
     "@babel/core": "^7.14.3",
-    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-env": "^7.14.4",
     "babel-loader": "^8.2.2",
     "eslint": "^7.27.0",
     "eslint-config-standard": "^16.0.2",
