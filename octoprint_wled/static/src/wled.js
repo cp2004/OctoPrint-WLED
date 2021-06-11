@@ -85,6 +85,7 @@ $(function () {
           )
           observables.effect(settings.effects[name].settings()[index].effect())
           observables.speed(settings.effects[name].settings()[index].speed())
+          observables.intensity(settings.effects[name].settings()[index].intensity())
           observables.override_on(
             settings.effects[name].settings()[index].override_on()
           )
