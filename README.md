@@ -39,7 +39,7 @@ aims to provide a similar experience of high configurability with ease of use.
 This plugin will only install on Python 3 systems. For a guide to upgrading (it's easy!), please see my
 [blog post (octoprint.org)](https://octoprint.org/blog/2020/09/10/upgrade-to-py3/).
 
-In addition, I can also only guarantee compatibility with OctoPrint 1.5.0 and newer.
+In addition, I can only guarantee compatibility with OctoPrint 1.5.0 and newer.
 
 ### Install
 
@@ -76,7 +76,7 @@ To setup the node environment for frontend stuff:
 * Build & watch static assets in development mode: `npm start`
 * Build both assets in release mode: `npm run release`
 
-These files *should not* be checked in, they are built on release automatically by a GitHub action.
+These files *should not* be committed to Git, they are built on release automatically by a GitHub action.
 
 ## Credits
 
