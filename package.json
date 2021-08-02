@@ -34,7 +34,7 @@
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "sass": "^1.35.2",
+    "sass": "^1.37.0",
     "webpack": "^5.47.1",
     "webpack-cli": "^4.7.2"
   },
