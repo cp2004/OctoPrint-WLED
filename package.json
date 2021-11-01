@@ -51,7 +51,7 @@
     ]
   },
   "dependencies": {
-    "concurrently": "^6.2.1",
+    "concurrently": "^6.3.0",
     "nanoid": "^3.1.25"
   }
 }
