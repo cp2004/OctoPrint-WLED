@@ -58,11 +58,9 @@ This is because the frontend code is built as part of the release process. For d
 
 Configuration can be performed in the OctoPrint UI, under Settings > WLED Integration.
 
-## Support My Efforts
+## Sponsors
 
-I created this plugin in my spare time, for the community. If you have enjoyed using it,
-please consider [supporting its development](https://github.com/sponsors/cp2004) through GitHub sponsors.
-Monthly, one-time or a custom amount, you choose!
+* Sponsor
 
 ## Contributing
 
