@@ -60,22 +60,14 @@ Configuration can be performed in the OctoPrint UI, under Settings > WLED Integr
 
 ## Sponsors
 
-* Sponsor
+* [@iFrostizz](https://github.com/iFrostizz)
+* [@KenLucke](https://github.com/KenLucke)
 
-## Contributing
+As well as 7 others supporting me through [GitHub Sponsors](https://github.com/sponsors/cp2004)!
 
-Contributions are welcome, full contributing guidelines are coming soon.
+## Supporting my efforts
 
-If you are feeling like contributing a new feature, feel free to open an issue so we can discuss!
-
-To setup the node environment for frontend stuff:
-
-* Install: `npm install`
-* Build & watch static assets in development mode: `npm start`
-* Build both assets in release mode: `npm run release`
-
-These files *should not* be committed to Git, they are built on release automatically by a GitHub action.
-
+I created this project in my spare time, so if you have found it useful or enjoyed using it then please consider [supporting it's development!](https://github.com/sponsors/cp2004). You can sponsor monthly or one time, for any amount you choose.
 ## Credits
 
 This plugin wouldn't be possible without the great work from [@frenck](https://github.com/frenck) with the
