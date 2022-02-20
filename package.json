@@ -4,12 +4,12 @@
   "description": "Connect OctoPrint to WLED",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"npm run dev\" \"npm run css-dev\"",
-    "build": "webpack --mode=production",
-    "dev": "webpack --mode=development --watch",
+    "start": "concurrently \"npm run esbuild-dev\" \"npm run css-dev\"",
+    "release": "npm run esbuild && npm run css-build",
     "css-dev": "sass --watch octoprint_wled/static/src/wled.scss octoprint_wled/static/dist/wled.css",
     "css-build": "sass --style=compressed --no-source-map octoprint_wled/static/src/wled.scss octoprint_wled/static/dist/wled.css",
-    "release": "concurrently \"npm run build\" \"npm run css-build\""
+    "esbuild": "esbuild ./octoprint_wled/static/src/wled.js --bundle --minify --sourcemap --target=\"chrome92,edge96,firefox94,ios12.2,safari13.1\" --outfile=./octoprint_wled/static/dist/wled.js",
+    "esbuild-dev": "esbuild ./octoprint_wled/static/src/wled.js --bundle --watch --target=\"chrome96,firefox95,safari15.2\" --outfile=./octoprint_wled/static/dist/wled.js"
   },
   "repository": {
     "type": "git",
@@ -26,17 +26,11 @@
   },
   "homepage": "https://github.com/cp2004/OctoPrint-WLED#readme",
   "devDependencies": {
-    "@babel/core": "^7.17.2",
-    "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.3",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "sass": "^1.49.7",
-    "webpack": "^5.65.0",
-    "webpack-cli": "^4.9.2"
+    "eslint": "^8.9.0",
+    "eslint-config-standard": "^17.0.0-1",
+    "sass": "^1.49.8",
+    "concurrently": "^7.0.0",
+    "esbuild": "^0.14.23"
   },
   "browserslist": {
     "production": [
@@ -51,7 +45,6 @@
     ]
   },
   "dependencies": {
-    "concurrently": "^7.0.0",
-    "nanoid": "^3.2.0"
+    "nanoid": "^3.3.1"
   }
 }
