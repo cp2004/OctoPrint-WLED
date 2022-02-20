@@ -302,7 +302,7 @@ class Device:
             raise WLEDError("WLED data is incomplete, cannot construct device object")
         self.update_from_dict(data)
 
-    def update_from_dict(self, data: dict) -> "Device":
+    def update_from_dict(self, data: dict) -> Device:
         """Return Device object from WLED API response."""
         if "effects" in data and data["effects"]:
             effects = [

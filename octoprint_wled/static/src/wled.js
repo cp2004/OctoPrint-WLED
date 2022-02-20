@@ -34,8 +34,8 @@ $(function () {
 
     self.lights_on = ko.observable(true)
 
-    self.createEffectObservables = (u_id = 0) => ({
-      unique_id: ko.observable(u_id),
+    self.createEffectObservables = (uId = 0) => ({
+      unique_id: ko.observable(uId),
       id: ko.observable(0),
       brightness: ko.observable(200),
       color_primary: ko.observable('#ffffff'),
