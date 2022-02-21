@@ -43,10 +43,10 @@ repos:
       - id: flake8
         additional_dependencies:
           - flake8-bugbear
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v8.9.0
-    hooks:
-      - id: eslint
-        additional_dependencies:
-          - eslint@8.9.0
-          - eslint-config-standard@17.0.0-1
+  # - repo: https://github.com/pre-commit/mirrors-eslint
+  #   rev: v8.9.0
+  #   hooks:
+  #     - id: eslint
+  #       additional_dependencies:
+  #         - eslint@8.9.0
+  #         - eslint-config-standard@17.0.0-1
