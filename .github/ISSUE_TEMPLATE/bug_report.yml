@@ -1,0 +1,41 @@
+name: Bug Report
+description: Found something wrong? Report it!
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: Reporting an issue is easy! Please fill out as much of the information below as possible, to make your experience easier.
+  - type: textarea
+    attributes:
+      label: Description of the bug
+      description: Please provide a brief description of what you think went wrong
+      placeholder: It broke when I did...
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        Make sure you are up-to-date on the latest versions of all software involved.
+        **What versions are you running?**
+        *Please include the WLED version you are using as well!*
+  - type: textarea
+    attributes:
+      label: Software versions
+      placeholder: OctoPrint 1.7.3, WLED 0.12.0
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        ## Log files
+        Systeminfo bundles or just the `octoprint.log` files. I don't mind either. But please include
+        one or the other - this plugin has quite detailed logging if it encounters an error.
+        ## Browser logs & screenshots
+        If you are reporting an issue with the UI, please include as much detail as possible, such as screenshots
+        or relevant errors from the browser console.
+  - type: textarea
+    attributes:
+      label: Logs and screenshots
+      description: Please upload the files here
+    validations:
+      required: true

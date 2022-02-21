@@ -1,0 +1,11 @@
+name: Feature Request
+description: Want a new feature implemented? Request improvements here.
+title: "[Request]: "
+body:
+  - type: textarea
+    attributes:
+      label: What would you like implemented?
+      description: Please provide a brief description of what you want implemented. Remember you are trying to convince me this is worth my time to work on for you.
+      placeholder: It would be great if...
+    validations:
+      required: true
