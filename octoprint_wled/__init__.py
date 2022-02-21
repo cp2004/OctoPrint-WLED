@@ -460,7 +460,7 @@ class WLEDPlugin(
 
 __plugin_name__ = "WLED Connection"
 __plugin_version__ = __version__
-__plugin_pythoncompat__ = ">=3.6,<4"
+__plugin_pythoncompat__ = ">=3.7,<4"
 
 
 def __plugin_load__():
