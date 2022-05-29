@@ -60,6 +60,7 @@ Configuration can be performed in the OctoPrint UI, under Settings > WLED Integr
 
 ## Sponsors
 
+* [SimplyPrint](https://simplyprint.io/)
 * [@iFrostizz](https://github.com/iFrostizz)
 * [@KenLucke](https://github.com/KenLucke)
 
