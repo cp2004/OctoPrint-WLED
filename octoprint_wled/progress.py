@@ -65,6 +65,8 @@ class PluginProgressHandler:
         for segment in effect_settings:
             if segment["override_on"]:
                 turn_lights_on = True
+            if segment["scrolling_text"]:
+                effect_scrolling_text = True
 
             self._logger.debug(
                 f"Setting {progress_type} progress to segment {segment['id']}"
@@ -77,9 +79,10 @@ class PluginProgressHandler:
                     "brightness": int(segment["brightness"]),
                     "color_primary": hex_to_rgb(segment["color_primary"]),
                     "color_secondary": hex_to_rgb(segment["color_secondary"]),
-                    "effect": "Percent",
-                    "intensity": int(value),
+                    "effect": "Scrolling Text" if effect_scrolling_text else "Percent",
+                    "intensity": 128 if effect_scrolling_text else int(value),
                     "on": lights_on,
+                    "n": f"{value}% Complete" if effect_scrolling_text else None,
                 },
             )
 
