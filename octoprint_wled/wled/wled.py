@@ -244,6 +244,7 @@ class WLED:
         start: int | None = None,
         stop: int | None = None,
         transition: int | None = None,
+        n: str | None = None,
     ) -> None:
         """Change state of a WLED Light segment."""
         if self._device is None:
@@ -266,6 +267,7 @@ class WLED:
             "start": start,
             "stop": stop,
             "sx": speed,
+            "n": n,
         }
 
         # > WLED 0.10.0, does not support segment control on/bri.
