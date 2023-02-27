@@ -30,7 +30,7 @@
     "eslint-config-standard": "^17.0.0-1",
     "sass": "^1.49.9",
     "concurrently": "^7.0.0",
-    "esbuild": "^0.14.23"
+    "esbuild": "^0.17.10"
   },
   "browserslist": {
     "production": [
