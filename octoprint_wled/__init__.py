@@ -355,6 +355,7 @@ class WLEDPlugin(
                             "id": 0,
                             "override_on": False,
                             "unique_id": "yqvg8h0c",
+                            "scrolling_text": False,
                         }
                     ],
                 },
@@ -368,6 +369,7 @@ class WLEDPlugin(
                             "id": 0,
                             "override_on": False,
                             "unique_id": "sduhc3fh",
+                            "scrolling_text": False,
                         }
                     ],
                     "tool": True,
@@ -384,6 +386,7 @@ class WLEDPlugin(
                             "id": 0,
                             "override_on": False,
                             "unique_id": "argrsh53",
+                            "scrolling_text": False,
                         }
                     ],
                     "bed_or_tool": "tool",

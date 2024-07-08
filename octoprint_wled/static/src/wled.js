@@ -53,7 +53,8 @@ $(function () {
       brightness: ko.observable(200),
       color_primary: ko.observable('#ffffff'),
       color_secondary: ko.observable('#000000'),
-      override_on: ko.observable(false)
+      override_on: ko.observable(false),
+      scrolling_text: ko.observable(false)
     })
 
     self.setEditingObservables = (effect, data) => {
@@ -110,6 +111,9 @@ $(function () {
           )
           observables.override_on(
             settings.progress[name].settings()[index].override_on()
+          )
+          observables.scrolling_text(
+            settings.progress[name].settings()[index].scrolling_text()
           )
           self.progress[name].segments.push(observables)
         })
